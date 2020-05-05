@@ -9,6 +9,14 @@ from ..form_validators import ClinicianCallEnrollmentFormValidator
 
 class TestClinicianCallEnrollmentForm(TestCase):
 
+    def setUp(self):
+        ClinicianCallEnrollmentFormValidator.clinician_call_enrollment_model = \
+            'potlako_validations.cliniciancallenrollment'
+        ClinicianCallEnrollmentFormValidator.subject_consent_model = \
+            'potlako_validations.subjectconsent'
+        ClinicianCallEnrollmentFormValidator.subject_screening_model = \
+            'potlako_validations.subjectscreening'
+
     def test_form_valid(self):
         cleaned_data = {
             'screening_identifier': '1111111',
@@ -40,3 +48,4 @@ class TestClinicianCallEnrollmentForm(TestCase):
             form_validator.validate()
         except ValidationError as e:
             self.fail(f'ValidationError unexpectedly raised. Got{e}')
+
