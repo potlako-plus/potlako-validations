@@ -5,22 +5,9 @@ from .crf_form_validator import CRFFormValidator
 from .form_validator_mixin import FormValidatorMixin
 
 
-class ClinicianCallEnrollmentFormValidator(CRFFormValidator,
-                                           FormValidatorMixin,
-                                           FormValidator):
+class ClinicianCallEnrollmentFormValidator(FormValidator):
 
     def clean(self):
-        self.subject_identifier = self.cleaned_data.get('subject_identifier')
-        if self.instance and not self.instance.id:
-            self.validate_offstudy_model()
-
-        id = None
-        if self.instance:
-            id = self.instance.id
-
-        self.validate_against_consent_datetime(
-            self.cleaned_data.get('report_datetime'),
-            id=id)
 
         self.validate_other_specify(
             field='call_clinician_type',

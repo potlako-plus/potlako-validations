@@ -20,27 +20,16 @@ class TestClinicianCallEnrollmentForm(TestCase):
     def test_form_valid(self):
         cleaned_data = {
             'screening_identifier': '1111111',
-            'contact_date': get_utcnow(),
-            'info_from_clinician': YES,
+            'report_datetime': get_utcnow(),
             'call_clinician_type': 'blah',
-            'received_training': YES,
-            'consented_contact': YES,
-            'facility': 'blah',
             'facility_unit': 'blah',
-            'national_identity': '910221439',
-            'last_name': 'TEST',
-            'first_name': 'TEST',
-            'dob': get_utcnow() - relativedelta(years=22),
-            'age_in_years': 22,
-            'gender': 'F',
-            'village_town': 'blah',
-            'kgotla': 'blah',
-            'nearest_facility': 'blah',
-            'primary_cell': '72918270',
-            'kin_lastname': 'TEST',
-            'kin_firstname': 'ONE',
-            'kin_cell': '71329182',
-            'other_kin_avail': NO
+            'kin_relationship': 'blah',
+            'clinician_type': 'blah',
+            'symptoms': 'blah',
+            'early_symptoms_date_estimated': NO,
+            'suspected_cancer': 'blah',
+            'patient_disposition': 'blah',
+            'investigated': 'blah'
         }
         form_validator = ClinicianCallEnrollmentFormValidator(
             cleaned_data=cleaned_data)
