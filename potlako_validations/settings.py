@@ -6,7 +6,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 APP_NAME = 'potlako_validations'
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
-
+ETC_DIR = '/etc'
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '!%m93e40ob0k8ro9$2%_btmp%uv#1x%cme59t&r0ieofqfnp28'
 

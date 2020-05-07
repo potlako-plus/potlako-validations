@@ -14,16 +14,12 @@ class PatientCallFuFormValidator(FormValidator):
                 self.not_required_if(
                     NO,
                     field='next_visit_delayed',
-                    field_required=field, )
+                    field_required=field,)
 
-        self.validate_other_specify(
-            field='patient_factor',
-            other_specify_field='patient_factor_other', )
+        other_fields = ['patient_factor', 'health_system_factor',
+                        'next_ap_facility']
 
-        self.validate_other_specify(
-            field='health_system_factor',
-            other_specify_field='health_system_factor_other', )
+        for field in other_fields:
+            self.validate_other_specify(
+                field='field',)
 
-        self.validate_other_specify(
-            field='next_ap_facility',
-            other_specify_field='next_ap_facility_other', )
