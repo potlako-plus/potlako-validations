@@ -112,4 +112,3 @@ class SubjectLocator(BaseUuidModel):
 
     may_visit_home = models.CharField(
         max_length=3)
-

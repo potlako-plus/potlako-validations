@@ -1,11 +1,12 @@
 from edc_constants.constants import ALIVE
 from edc_form_validators import FormValidator
+from .crf_form_validator import CRFFormValidator
 
 
-class HomeVisitFormValidator(FormValidator):
+class HomeVisitFormValidator(CRFFormValidator, FormValidator):
 
     def clean(self):
-
+        super().clean()
         self.not_required_if(
             'research_team',
             field='clinician_type',

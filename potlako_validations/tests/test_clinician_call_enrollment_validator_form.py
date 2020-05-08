@@ -11,12 +11,6 @@ from ..form_validators import ClinicianCallEnrollmentFormValidator
 class TestClinicianCallEnrollmentForm(TestCase):
 
     def setUp(self):
-        ClinicianCallEnrollmentFormValidator.clinician_call_enrollment_model = \
-            'potlako_validations.cliniciancallenrollment'
-        ClinicianCallEnrollmentFormValidator.subject_consent_model = \
-            'potlako_validations.subjectconsent'
-        ClinicianCallEnrollmentFormValidator.subject_screening_model = \
-            'potlako_validations.subjectscreening'
 
         self.options = {
             'screening_identifier': '1111111',
