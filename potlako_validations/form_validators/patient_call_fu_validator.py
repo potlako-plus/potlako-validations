@@ -21,5 +21,5 @@ class PatientCallFuFormValidator(FormValidator):
 
         for field in other_fields:
             self.validate_other_specify(
-                field='field',)
+                field)
 

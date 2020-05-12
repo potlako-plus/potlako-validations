@@ -11,7 +11,7 @@ class ClinicianCallEnrollmentFormValidator(FormValidator):
         date_registered = self.cleaned_data.get('reg_date')
         report_datetime = self.cleaned_data.get('report_datetime')
 
-        if date_registered > report_datetime.date():
+        if date_registered and date_registered > report_datetime.date():
             raise ValidationError('Date patient was registered at facility'
                                   ' should be earlier than report datetime.')
 
@@ -28,18 +28,18 @@ class ClinicianCallEnrollmentFormValidator(FormValidator):
         )
 
         self.validate_other_specify(
-            field='call_clinician_type',
+            'call_clinician_type',
             other_specify_field='call_clinician_other',
         )
 
-        self.validate_other_specify(field='facility',)
+        self.validate_other_specify('facility',)
 
         self.validate_other_specify(
-            field='facility_unit',
+            'facility_unit',
             other_specify_field='unit_other'
         )
 
-        self.validate_other_specify(field='nearest_facility',)
+        self.validate_other_specify('nearest_facility',)
 
         self.validate_other_specify(
             field='kin_relationship',
@@ -68,7 +68,7 @@ class ClinicianCallEnrollmentFormValidator(FormValidator):
             field_required='suspected_cancer_unsure'
         )
 
-        self.validate_other_specify(field='suspected_cancer',)
+        self.validate_other_specify('suspected_cancer',)
 
         self.applicable_if(
             'refer',
@@ -86,7 +86,7 @@ class ClinicianCallEnrollmentFormValidator(FormValidator):
                 field_required=field
             )
 
-        self.validate_other_specify(field='referral_facility',)
+        self.validate_other_specify('referral_facility',)
 
         self.applicable_if(
             YES,

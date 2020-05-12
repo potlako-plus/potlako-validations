@@ -27,4 +27,4 @@ class HomeVisitFormValidator(CRFFormValidator, FormValidator):
 
         for other_field in other_fields:
             self.validate_other_specify(
-                field=other_field,)
+                other_field)
