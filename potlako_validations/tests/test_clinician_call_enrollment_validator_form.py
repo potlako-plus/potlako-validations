@@ -1,13 +1,13 @@
-from dateutil.relativedelta import relativedelta
 from django.core.exceptions import ValidationError
-from django.test import TestCase
+from django.test import TestCase, tag
 from edc_base.utils import get_utcnow
-from edc_constants.constants import OTHER
+from edc_constants.constants import OTHER, NOT_APPLICABLE
 from edc_constants.constants import YES, NO
 
 from ..form_validators import ClinicianCallEnrollmentFormValidator
 
 
+@tag('cl')
 class TestClinicianCallEnrollmentForm(TestCase):
 
     def setUp(self):
@@ -19,8 +19,6 @@ class TestClinicianCallEnrollmentForm(TestCase):
             'facility_unit': 'blah',
             'kin_relationship': 'blah',
             'clinician_type': 'blah',
-            'symptoms': 'blah',
-            'early_symptoms_date_estimated': NO,
             'suspected_cancer': 'blah',
             'patient_disposition': 'blah',
             'investigated': 'blah'
@@ -33,6 +31,23 @@ class TestClinicianCallEnrollmentForm(TestCase):
             form_validator.validate()
         except ValidationError as e:
             self.fail(f'ValidationError unexpectedly raised. Got{e}')
+
+    def test_info_from_clinician_invalid(self):
+
+        self.options['info_from_clinician'] = NO
+        form_validator = ClinicianCallEnrollmentFormValidator(
+            cleaned_data=self.options)
+        self.assertRaises(ValidationError, form_validator.validate)
+        self.assertIn('info_source_specify', form_validator._errors)
+
+    def test_info_from_clinician_invalid(self):
+
+        self.options['info_from_clinician'] = YES
+        self.options['info_source_specify'] = 'blah'
+        form_validator = ClinicianCallEnrollmentFormValidator(
+            cleaned_data=self.options)
+        self.assertRaises(ValidationError, form_validator.validate)
+        self.assertIn('info_source_specify', form_validator._errors)
 
     def test_call_clinician_type_other_invalid(self):
 
@@ -110,25 +125,6 @@ class TestClinicianCallEnrollmentForm(TestCase):
         except ValidationError as e:
             self.fail(f'ValidationError unexpectedly raised. Got{e}')
 
-    def test_symptoms_other_invalid(self):
-
-        self.options['symptoms'] = OTHER
-        form_validator = ClinicianCallEnrollmentFormValidator(
-            cleaned_data=self.options)
-        self.assertRaises(ValidationError, form_validator.validate)
-        self.assertIn('symptoms_other', form_validator._errors)
-
-    def test_symptoms_other_valid(self):
-
-        self.options['symptoms'] = OTHER
-        self.options['symptoms_other'] = 'blah'
-        form_validator = ClinicianCallEnrollmentFormValidator(
-            cleaned_data=self.options)
-        try:
-            form_validator.validate()
-        except ValidationError as e:
-            self.fail(f'ValidationError unexpectedly raised. Got{e}')
-
     def test_early_symptoms_date_invalid(self):
 
         self.options['early_symptoms_date_estimated'] = YES
@@ -184,6 +180,7 @@ class TestClinicianCallEnrollmentForm(TestCase):
         self.options['referral_facility'] = 'blah'
         self.options['referral_discussed'] = 'blah'
         self.options['clinician_designation'] = 'blah'
+        self.options['referral_unit'] = NOT_APPLICABLE
         self.options['referral_fu_date'] = get_utcnow()
         form_validator = ClinicianCallEnrollmentFormValidator(
             cleaned_data=self.options)
@@ -282,6 +279,7 @@ class TestClinicianCallEnrollmentForm(TestCase):
     def test_investigation_notes_invalid(self):
 
         self.options['investigated'] = YES
+        self.options['investigation_notes'] = NOT_APPLICABLE
         form_validator = ClinicianCallEnrollmentFormValidator(
             cleaned_data=self.options)
         self.assertRaises(ValidationError, form_validator.validate)
