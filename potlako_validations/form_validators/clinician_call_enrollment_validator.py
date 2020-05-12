@@ -6,6 +6,14 @@ from edc_form_validators import FormValidator
 class ClinicianCallEnrollmentFormValidator(FormValidator):
 
     def clean(self):
+        super().clean()
+
+        date_registered = self.cleaned_data.get('reg_date')
+        report_datetime = self.cleaned_data.get('report_datetime')
+
+        if date_registered > report_datetime.date():
+            raise ValidationError('Date patient was registered at facility'
+                                  ' should be earlier than report datetime.')
 
         self.required_if(
             NO,
