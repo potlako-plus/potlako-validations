@@ -1,5 +1,5 @@
 from django.core.exceptions import ValidationError
-from edc_constants.constants import YES, NO, OTHER
+from edc_constants.constants import YES, NO, OTHER, MALE, FEMALE
 from edc_form_validators import FormValidator
 
 
@@ -69,6 +69,22 @@ class ClinicianCallEnrollmentFormValidator(FormValidator):
         )
 
         self.validate_other_specify('suspected_cancer',)
+
+        identity_key = self.cleaned_data.get('national_identity')[4]
+        gender = self.cleaned_data.get('gender')
+
+        if gender == MALE and identity_key != '1':
+            message = {'national_identity': 'The national identity number '
+                       f'does not match the pattern expected. Expected the '
+                       f'fourth digit as \'1\' for male, got {identity_key}'}
+            self._errors.update(message)
+            raise ValidationError(message)
+        elif gender == FEMALE and identity_key != '2':
+            message = {'national_identity': 'The national identity number '
+                       f'does not match the pattern expected. Expected the '
+                       f'fourth digit as \'2\' for female, got {identity_key}'}
+            self._errors.update(message)
+            raise ValidationError(message)
 
         self.applicable_if(
             'refer',
