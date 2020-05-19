@@ -3,3 +3,4 @@ from .home_visit_validator import HomeVisitFormValidator
 from .next_of_kin_validator import NextOfKinFormValidator
 from .patient_call_fu_validator import PatientCallFuFormValidator
 from .sms_validator import SmsFormValidator
+from .subject_consent_validator import SubjectConsentFormValidator
