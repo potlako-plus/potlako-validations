@@ -1,5 +1,6 @@
 from .clinician_call_enrollment_validator import ClinicianCallEnrollmentFormValidator
 from .home_visit_validator import HomeVisitFormValidator
+from .investigations_validator import InvestigationsFormValidator
 from .next_of_kin_validator import NextOfKinFormValidator
 from .patient_call_fu_validator import PatientCallFuFormValidator
 from .sms_validator import SmsFormValidator
