@@ -7,7 +7,6 @@ from edc_constants.constants import YES, NO
 from ..form_validators import ClinicianCallEnrollmentFormValidator
 
 
-@tag('cl')
 class TestClinicianCallEnrollmentForm(TestCase):
 
     def setUp(self):
@@ -21,7 +20,8 @@ class TestClinicianCallEnrollmentForm(TestCase):
             'clinician_type': 'blah',
             'suspected_cancer': 'blah',
             'patient_disposition': 'blah',
-            'investigated': 'blah'
+            'investigated': 'blah',
+            'national_identity': '77727777'
         }
 
     def test_form_valid(self):
@@ -32,7 +32,7 @@ class TestClinicianCallEnrollmentForm(TestCase):
         except ValidationError as e:
             self.fail(f'ValidationError unexpectedly raised. Got{e}')
 
-    def test_info_from_clinician_invalid(self):
+    def test_info_from_clinician_invalid1(self):
 
         self.options['info_from_clinician'] = NO
         form_validator = ClinicianCallEnrollmentFormValidator(
@@ -40,8 +40,7 @@ class TestClinicianCallEnrollmentForm(TestCase):
         self.assertRaises(ValidationError, form_validator.validate)
         self.assertIn('info_source_specify', form_validator._errors)
 
-    def test_info_from_clinician_invalid(self):
-
+    def test_info_from_clinician_invalid2(self):
         self.options['info_from_clinician'] = YES
         self.options['info_source_specify'] = 'blah'
         form_validator = ClinicianCallEnrollmentFormValidator(
