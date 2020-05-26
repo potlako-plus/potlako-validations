@@ -4,5 +4,6 @@ from .investigations_validator import InvestigationsFormValidator
 from .medical_conditions_validator import MedicalConditionsFormValidator
 from .next_of_kin_validator import NextOfKinFormValidator
 from .patient_call_fu_validator import PatientCallFuFormValidator
+from .patient_call_initial_validator import PatientCallInitialFormValidator
 from .sms_validator import SmsFormValidator
 from .subject_consent_validator import SubjectConsentFormValidator
