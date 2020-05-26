@@ -44,9 +44,9 @@ class PatientCallFuFormValidator(FormValidator):
             'next_ap_facility',
             other_specify_field='next_ap_facility_other',)
 
-        self.validate_next_appointment_date_valid()
+        self.validate_next_appointment_date()
 
-    def validate_next_appointment_date_valid(self):
+    def validate_next_appointment_date(self):
         next_ap_date = self.cleaned_data.get('next_appointment_date')
         subject_visit = self.cleaned_data.get('subject_visit')
 
