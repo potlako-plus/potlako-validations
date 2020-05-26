@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'django_crypto_fields.apps.AppConfig',
     'django_revision.apps.AppConfig',
     'edc_protocol.apps.AppConfig',
+    'edc_device.apps.AppConfig',
     'potlako_validations.apps.AppConfig',
 ]
 
