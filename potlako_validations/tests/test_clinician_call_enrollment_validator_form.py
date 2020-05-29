@@ -32,22 +32,6 @@ class TestClinicianCallEnrollmentForm(TestCase):
         except ValidationError as e:
             self.fail(f'ValidationError unexpectedly raised. Got{e}')
 
-    def test_info_from_clinician_invalid1(self):
-
-        self.options['info_from_clinician'] = NO
-        form_validator = ClinicianCallEnrollmentFormValidator(
-            cleaned_data=self.options)
-        self.assertRaises(ValidationError, form_validator.validate)
-        self.assertIn('info_source_specify', form_validator._errors)
-
-    def test_info_from_clinician_invalid2(self):
-        self.options['info_from_clinician'] = YES
-        self.options['info_source_specify'] = 'blah'
-        form_validator = ClinicianCallEnrollmentFormValidator(
-            cleaned_data=self.options)
-        self.assertRaises(ValidationError, form_validator.validate)
-        self.assertIn('info_source_specify', form_validator._errors)
-
     def test_call_clinician_type_other_invalid(self):
 
         self.options['call_clinician_type'] = OTHER
