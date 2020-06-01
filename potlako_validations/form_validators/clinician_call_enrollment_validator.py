@@ -16,16 +16,13 @@ class ClinicianCallEnrollmentFormValidator(FormValidator):
                                   ' should be earlier than report datetime.')
 
         self.required_if(
-            NO,
-            field='info_from_clinician',
-            field_required='info_source_specify'
-        )
+            'call_with_clinician',
+            field='cancer_suspect',
+            field_required='call_clinician_type')
 
-        self.required_if(
-            YES,
-            field='info_from_clinician',
-            field_required='call_clinician_type'
-        )
+        self.validate_other_specify(
+            field='cancer_suspect',
+            other_specify_field='cancer_suspect_other',)
 
         self.validate_other_specify(
             'call_clinician_type',
