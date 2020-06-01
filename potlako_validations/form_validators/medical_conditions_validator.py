@@ -8,6 +8,9 @@ class MedicalConditionsFormValidator(CRFFormValidator, FormValidator):
     def clean(self):
         super().clean()
 
+        self.subject_identifier = self.cleaned_data.get(
+            'subject_visit').appointment.subject_identifier
+
         self.required_if(
             YES,
             field='diagnosis_date_estimate',

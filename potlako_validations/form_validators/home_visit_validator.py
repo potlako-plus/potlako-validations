@@ -7,6 +7,10 @@ class HomeVisitFormValidator(CRFFormValidator, FormValidator):
 
     def clean(self):
         super().clean()
+
+        self.subject_identifier = self.cleaned_data.get(
+            'subject_visit').appointment.subject_identifier
+
         self.not_required_if(
             'research_team',
             field='clinician_type',

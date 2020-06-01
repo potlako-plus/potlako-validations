@@ -1,8 +1,8 @@
 from django.core.exceptions import ValidationError
-from django.test import TestCase, tag
+from django.test import TestCase
 from edc_base.utils import get_utcnow
 from edc_constants.constants import OTHER, NOT_APPLICABLE
-from edc_constants.constants import YES, NO
+from edc_constants.constants import YES
 
 from ..form_validators import ClinicianCallEnrollmentFormValidator
 
@@ -31,22 +31,6 @@ class TestClinicianCallEnrollmentForm(TestCase):
             form_validator.validate()
         except ValidationError as e:
             self.fail(f'ValidationError unexpectedly raised. Got{e}')
-
-    def test_info_from_clinician_invalid1(self):
-
-        self.options['info_from_clinician'] = NO
-        form_validator = ClinicianCallEnrollmentFormValidator(
-            cleaned_data=self.options)
-        self.assertRaises(ValidationError, form_validator.validate)
-        self.assertIn('info_source_specify', form_validator._errors)
-
-    def test_info_from_clinician_invalid2(self):
-        self.options['info_from_clinician'] = YES
-        self.options['info_source_specify'] = 'blah'
-        form_validator = ClinicianCallEnrollmentFormValidator(
-            cleaned_data=self.options)
-        self.assertRaises(ValidationError, form_validator.validate)
-        self.assertIn('info_source_specify', form_validator._errors)
 
     def test_call_clinician_type_other_invalid(self):
 
