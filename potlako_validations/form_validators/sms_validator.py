@@ -1,6 +1,5 @@
 from dateutil.relativedelta import relativedelta
 from django.core.exceptions import ValidationError
-from edc_constants.constants import ALIVE
 from edc_form_validators import FormValidator
 
 
