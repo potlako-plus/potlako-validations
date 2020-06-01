@@ -6,7 +6,6 @@ from .crf_form_validator import CRFFormValidator
 class MedicalConditionsFormValidator(CRFFormValidator, FormValidator):
 
     def clean(self):
-        super().clean()
 
         self.subject_identifier = self.cleaned_data.get(
             'subject_visit').appointment.subject_identifier
@@ -28,3 +27,5 @@ class MedicalConditionsFormValidator(CRFFormValidator, FormValidator):
 
         self.validate_other_specify(
             'medical_condition')
+
+        super().clean()
