@@ -1,16 +1,29 @@
+from dateutil.relativedelta import relativedelta
 from django.core.exceptions import ValidationError
-from django.test import TestCase, tag
+from django.test import TestCase
 from edc_base.utils import get_utcnow
 from edc_constants.constants import NO, OTHER, YES
 
 from ..form_validators import InvestigationsFormValidator
+from .models import SubjectConsent, SubjectVisit, Appointment
 
 
-@tag('inv')
 class TestPatientCallFuForm(TestCase):
+
+    def setUp(self):
+        self.subject_consent = SubjectConsent.objects.create(
+            subject_identifier='11111', consent_datetime=get_utcnow(),
+            gender='M', dob=(get_utcnow() - relativedelta(years=25)).date())
+        appointment = Appointment.objects.create(
+            subject_identifier=self.subject_consent.subject_identifier,
+            appt_datetime=get_utcnow(),
+            visit_code='1000')
+        self.subject_visit = SubjectVisit.objects.create(
+            appointment=appointment)
 
     def test_lab_tests_ordered_none(self):
         cleaned_data = {
+            'subject_visit': self.subject_visit,
             'lab_tests_ordered': NO,
         }
         form_validator = InvestigationsFormValidator(
@@ -22,6 +35,7 @@ class TestPatientCallFuForm(TestCase):
 
     def test_lab_tests_ordered_date_invalid(self):
         cleaned_data = {
+            'subject_visit': self.subject_visit,
             'lab_tests_ordered': YES,
             'facility_ordered': 'blah',
             'ordered_date': None,
@@ -34,6 +48,7 @@ class TestPatientCallFuForm(TestCase):
 
     def test_lab_tests_ordered_facility_invalid(self):
         cleaned_data = {
+            'subject_visit': self.subject_visit,
             'lab_tests_ordered': YES,
             'facility_ordered': None,
             'ordered_date': get_utcnow(),
@@ -46,6 +61,7 @@ class TestPatientCallFuForm(TestCase):
 
     def test_lab_tests_ordered_estimated_invalid(self):
         cleaned_data = {
+            'subject_visit': self.subject_visit,
             'lab_tests_ordered': YES,
             'facility_ordered': 'blah',
             'ordered_date': get_utcnow(),
@@ -58,6 +74,7 @@ class TestPatientCallFuForm(TestCase):
 
     def test_lab_tests_ordered_estimated_valid(self):
         cleaned_data = {
+            'subject_visit': self.subject_visit,
             'lab_tests_ordered': YES,
             'facility_ordered': 'blah',
             'ordered_date': get_utcnow(),
@@ -73,6 +90,7 @@ class TestPatientCallFuForm(TestCase):
 
     def test_lab_tests_ordered_estimation_invalid1(self):
         cleaned_data = {
+            'subject_visit': self.subject_visit,
             'lab_tests_ordered': YES,
             'facility_ordered': 'blah',
             'ordered_date': get_utcnow(),
@@ -86,6 +104,7 @@ class TestPatientCallFuForm(TestCase):
 
     def test_lab_tests_ordered_estimation_invalid2(self):
         cleaned_data = {
+            'subject_visit': self.subject_visit,
             'lab_tests_ordered': YES,
             'facility_ordered': 'balh',
             'ordered_date': get_utcnow(),
@@ -99,6 +118,7 @@ class TestPatientCallFuForm(TestCase):
 
     def test_pathology_tests_ordered_none(self):
         cleaned_data = {
+            'subject_visit': self.subject_visit,
             'pathology_tests_ordered': NO,
         }
         form_validator = InvestigationsFormValidator(
@@ -110,6 +130,7 @@ class TestPatientCallFuForm(TestCase):
 
     def test_pathology_tests_ordered_invalid(self):
         cleaned_data = {
+            'subject_visit': self.subject_visit,
             'pathology_tests_ordered': YES,
             'pathology_test': None,
             'pathology_specimen_date': get_utcnow(),
@@ -125,6 +146,7 @@ class TestPatientCallFuForm(TestCase):
 
     def test_pathology_specimen_date_invalid(self):
         cleaned_data = {
+            'subject_visit': self.subject_visit,
             'pathology_tests_ordered': YES,
             'pathology_test': 'blah',
             'pathology_specimen_date': None,
@@ -140,6 +162,7 @@ class TestPatientCallFuForm(TestCase):
 
     def test_pathology_nhl_date_invalid(self):
         cleaned_data = {
+            'subject_visit': self.subject_visit,
             'pathology_tests_ordered': YES,
             'pathology_test': 'blah',
             'pathology_specimen_date': get_utcnow(),
@@ -155,6 +178,7 @@ class TestPatientCallFuForm(TestCase):
 
     def test_pathology_result_date_invalid(self):
         cleaned_data = {
+            'subject_visit': self.subject_visit,
             'pathology_tests_ordered': YES,
             'pathology_test': 'blah',
             'pathology_specimen_date': get_utcnow(),
@@ -170,6 +194,7 @@ class TestPatientCallFuForm(TestCase):
 
     def test_pathology_recieved_date_invalid(self):
         cleaned_data = {
+            'subject_visit': self.subject_visit,
             'pathology_tests_ordered': YES,
             'pathology_test': 'blah',
             'pathology_specimen_date': get_utcnow(),
@@ -185,6 +210,7 @@ class TestPatientCallFuForm(TestCase):
 
     def test_pathology_communicated_date_invalid(self):
         cleaned_data = {
+            'subject_visit': self.subject_visit,
             'pathology_tests_ordered': YES,
             'pathology_test': 'blah',
             'pathology_specimen_date': get_utcnow(),
@@ -200,6 +226,7 @@ class TestPatientCallFuForm(TestCase):
 
     def test_pathology_test_fna_valid(self):
         cleaned_data = {
+            'subject_visit': self.subject_visit,
             'pathology_tests_ordered': YES,
             'pathology_test': 'FNA',
             'fna_location': 'blah',
@@ -218,6 +245,7 @@ class TestPatientCallFuForm(TestCase):
 
     def test_pathology_test_fna_invalid(self):
         cleaned_data = {
+            'subject_visit': self.subject_visit,
             'pathology_tests_ordered': YES,
             'pathology_test': 'FNA',
             'fna_location': None,
@@ -234,6 +262,7 @@ class TestPatientCallFuForm(TestCase):
 
     def test_pathology_test_biopsy_valid(self):
         cleaned_data = {
+            'subject_visit': self.subject_visit,
             'pathology_tests_ordered': YES,
             'pathology_test': 'biopsy_other',
             'biopsy_other': 'blah',
@@ -252,6 +281,7 @@ class TestPatientCallFuForm(TestCase):
 
     def test_pathology_test_biopsy_invalid(self):
         cleaned_data = {
+            'subject_visit': self.subject_visit,
             'pathology_tests_ordered': YES,
             'pathology_test': 'biopsy_other',
             'biopsy_other': None,
@@ -268,6 +298,7 @@ class TestPatientCallFuForm(TestCase):
 
     def test_imaging_test_none(self):
         cleaned_data = {
+            'subject_visit': self.subject_visit,
             'imaging_tests': NO,
         }
         form_validator = InvestigationsFormValidator(
@@ -279,6 +310,7 @@ class TestPatientCallFuForm(TestCase):
 
     def test_imaging_test_status_invalid(self):
         cleaned_data = {
+            'subject_visit': self.subject_visit,
             'imaging_tests': YES,
             'imaging_test_status': None,
             'imaging_test_type': 'blah',
@@ -291,6 +323,7 @@ class TestPatientCallFuForm(TestCase):
 
     def test_imaging_test_type_invalid(self):
         cleaned_data = {
+            'subject_visit': self.subject_visit,
             'imaging_tests': YES,
             'imaging_test_status': 'biopsy_other',
             'imaging_test_type': None,
@@ -303,6 +336,7 @@ class TestPatientCallFuForm(TestCase):
 
     def test_imaging_tests_date_invalid(self):
         cleaned_data = {
+            'subject_visit': self.subject_visit,
             'imaging_tests': YES,
             'imaging_test_status': 'biopsy_other',
             'imaging_test_type': 'blah',
@@ -315,6 +349,7 @@ class TestPatientCallFuForm(TestCase):
 
     def test_imaging_test_ultrasoud_valid(self):
         cleaned_data = {
+            'subject_visit': self.subject_visit,
             'imaging_tests': YES,
             'imaging_test_status': 'biopsy_other',
             'imaging_test_type': 'ultrasound_other',
@@ -330,6 +365,7 @@ class TestPatientCallFuForm(TestCase):
 
     def test_imaging_test_ultrasoud_invalid(self):
         cleaned_data = {
+            'subject_visit': self.subject_visit,
             'imaging_tests': YES,
             'imaging_test_status': 'biopsy_other',
             'imaging_test_type': 'ultrasound_other',
@@ -343,6 +379,7 @@ class TestPatientCallFuForm(TestCase):
 
     def test_imaging_test_ct_valid(self):
         cleaned_data = {
+            'subject_visit': self.subject_visit,
             'imaging_tests': YES,
             'imaging_test_status': 'biopsy_other',
             'imaging_test_type': 'CT',
@@ -358,6 +395,7 @@ class TestPatientCallFuForm(TestCase):
 
     def test_imaging_test_ct_invalid(self):
         cleaned_data = {
+            'subject_visit': self.subject_visit,
             'imaging_tests': YES,
             'imaging_test_status': 'biopsy_other',
             'imaging_test_type': 'CT',
@@ -371,6 +409,7 @@ class TestPatientCallFuForm(TestCase):
 
     def test_imaging_test_mri_valid(self):
         cleaned_data = {
+            'subject_visit': self.subject_visit,
             'imaging_tests': YES,
             'imaging_test_status': 'biopsy_other',
             'imaging_test_type': 'MRI',
@@ -386,6 +425,7 @@ class TestPatientCallFuForm(TestCase):
 
     def test_imaging_test_mri_invalid(self):
         cleaned_data = {
+            'subject_visit': self.subject_visit,
             'imaging_tests': YES,
             'imaging_test_status': 'biopsy_other',
             'imaging_test_type': 'MRI',
@@ -399,6 +439,7 @@ class TestPatientCallFuForm(TestCase):
 
     def test_facility_ordered_other_valid(self):
         cleaned_data = {
+            'subject_visit': self.subject_visit,
             'lab_tests_ordered': YES,
             'facility_ordered': OTHER,
             'ordered_date': get_utcnow(),
@@ -414,6 +455,7 @@ class TestPatientCallFuForm(TestCase):
 
     def test_facility_ordered_other_invalid(self):
         cleaned_data = {
+            'subject_visit': self.subject_visit,
             'lab_tests_ordered': YES,
             'facility_ordered': OTHER,
             'ordered_date': get_utcnow(),
@@ -427,6 +469,7 @@ class TestPatientCallFuForm(TestCase):
 
     def test_imaging_tests_other_valid(self):
         cleaned_data = {
+            'subject_visit': self.subject_visit,
             'imaging_tests': YES,
             'imaging_test_status': 'biopsy_other',
             'imaging_test_type': OTHER,
@@ -442,6 +485,7 @@ class TestPatientCallFuForm(TestCase):
 
     def test_imaging_tests_other_invalid(self):
         cleaned_data = {
+            'subject_visit': self.subject_visit,
             'imaging_tests': YES,
             'imaging_test_status': 'biopsy_other',
             'imaging_test_type': OTHER,
