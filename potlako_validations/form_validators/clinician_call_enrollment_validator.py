@@ -15,6 +15,15 @@ class ClinicianCallEnrollmentFormValidator(FormValidator):
             raise ValidationError('Date patient was registered at facility'
                                   ' should be earlier than report datetime.')
 
+        self.required_if(
+            'call_with_clinician',
+            field='cancer_suspect',
+            field_required='call_clinician_type')
+
+        self.validate_other_specify(
+            field='cancer_suspect',
+            other_specify_field='cancer_suspect_other',)
+
         self.validate_other_specify(
             'call_clinician_type',
             other_specify_field='call_clinician_other',
