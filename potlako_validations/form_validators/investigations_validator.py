@@ -7,6 +7,10 @@ class InvestigationsFormValidator(CRFFormValidator, FormValidator):
 
     def clean(self):
         super().clean()
+
+        self.subject_identifier = self.cleaned_data.get(
+            'subject_visit').appointment.subject_identifier
+
         lab_fields = ['facility_ordered',
                       'ordered_date',
                       'ordered_date_estimated', ]
