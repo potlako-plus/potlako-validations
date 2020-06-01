@@ -29,6 +29,15 @@ class ClinicianCallEnrollmentFormValidator(FormValidator):
             other_specify_field='call_clinician_other',
         )
 
+        consented_contact = self.cleaned_data.get('consented_contact')
+
+        if consented_contact == NO:
+            message = {'consented_contact':
+                       'The Participant does not consent to being contacted by'
+                       ' the Potlako+ team. Can not continue with enrollment.'}
+            self._errors.update(message)
+            raise ValidationError(message)
+
         self.validate_other_specify('facility',)
 
         self.validate_other_specify(
