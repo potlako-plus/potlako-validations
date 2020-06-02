@@ -1,19 +1,29 @@
+from dateutil.relativedelta import relativedelta
 from django.core.exceptions import ValidationError
-from django.test import TestCase, tag
+from django.test import TestCase
 from edc_base.utils import get_utcnow
-from edc_constants.constants import OTHER, NOT_APPLICABLE
-from edc_constants.constants import YES, NO
+from edc_constants.constants import OTHER, YES
 
 from ..form_validators import ClinicianCallFollowupFormValidator
+from .models import SubjectConsent, SubjectVisit, Appointment
 
 
-@tag('cfu')
 class TestClinicianCallFollowUpForm(TestCase):
 
     def setUp(self):
+        self.subject_consent = SubjectConsent.objects.create(
+            subject_identifier='11111', consent_datetime=get_utcnow(),
+            gender='M', dob=(get_utcnow() - relativedelta(years=25)).date())
+        appointment = Appointment.objects.create(
+            subject_identifier=self.subject_consent.subject_identifier,
+            appt_datetime=get_utcnow(),
+            visit_code='1000')
+        self.subject_visit = SubjectVisit.objects.create(
+            appointment=appointment)
 
         self.options = {
             'facility_visited': 'blah',
+            'subject_visit': self.subject_visit,
         }
 
     def test_form_valid(self):
@@ -64,6 +74,7 @@ class TestClinicianCallFollowUpForm(TestCase):
 
     def test_patient_disposition_referral_date_invalid(self):
         self.options = {
+            'subject_visit': self.subject_visit,
             'patient_disposition': 'refer',
             'referral_date': None,
             'referral_facility': 'blah',
@@ -76,6 +87,7 @@ class TestClinicianCallFollowUpForm(TestCase):
 
     def test_patient_disposition_referral_facility_invalid(self):
         self.options = {
+            'subject_visit': self.subject_visit,
             'patient_disposition': 'refer',
             'referral_date': get_utcnow(),
             'referral_facility': None,
@@ -88,6 +100,7 @@ class TestClinicianCallFollowUpForm(TestCase):
 
     def test_patient_disposition_referral_reason_invalid(self):
         self.options = {
+            'subject_visit': self.subject_visit,
             'patient_disposition': 'refer',
             'referral_date': get_utcnow(),
             'referral_facility': 'blah',
@@ -100,6 +113,7 @@ class TestClinicianCallFollowUpForm(TestCase):
 
     def test_patient_disposition_referral_discussed_invalid(self):
         self.options = {
+            'subject_visit': self.subject_visit,
             'patient_disposition': 'refer',
             'referral_date': get_utcnow(),
             'referral_facility': 'blah',
@@ -112,6 +126,7 @@ class TestClinicianCallFollowUpForm(TestCase):
 
     def test_referral_discussed_clinician_invalid(self):
         self.options = {
+            'subject_visit': self.subject_visit,
             'patient_disposition': 'refer',
             'referral_date': get_utcnow(),
             'referral_facility': 'blah',
@@ -125,6 +140,7 @@ class TestClinicianCallFollowUpForm(TestCase):
 
     def test_patient_disposition_discharge_schedule_invalid(self):
         self.options = {
+            'subject_visit': self.subject_visit,
             'patient_disposition': 'discharge',
             'return_visit_scheduled': 'blah',
             'return_visit_date': None}
@@ -135,6 +151,7 @@ class TestClinicianCallFollowUpForm(TestCase):
 
     def test_patient_disposition_discharge_date_invalid(self):
         self.options = {
+            'subject_visit': self.subject_visit,
             'patient_disposition': 'discharge',
             'return_visit_scheduled': None,
             'return_visit_date': get_utcnow()}
@@ -145,6 +162,7 @@ class TestClinicianCallFollowUpForm(TestCase):
 
     def test_patient_disposition_discharge_schedule_valid(self):
         self.options = {
+            'subject_visit': self.subject_visit,
             'patient_disposition': 'discharge',
             'return_visit_scheduled': None,
             'return_visit_date': None}

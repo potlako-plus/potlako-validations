@@ -1,11 +1,14 @@
 from edc_constants.constants import YES
 from edc_form_validators import FormValidator
+from .crf_form_validator import CRFFormValidator
 
 
-class ClinicianCallFollowupFormValidator(FormValidator):
+class ClinicianCallFollowupFormValidator(CRFFormValidator, FormValidator):
 
     def clean(self):
-        super().clean()
+
+        self.subject_identifier = self.cleaned_data.get(
+            'subject_visit').appointment.subject_identifier
 
         self.validate_other_specify('facility_visited',)
 
@@ -37,3 +40,8 @@ class ClinicianCallFollowupFormValidator(FormValidator):
             field='patient_disposition',
             field_required='return_visit_date'
         )
+
+        self.validate_next_appointment_date(
+            next_ap_date=self.cleaned_data.get('return_visit_date'))
+
+        super().clean()
