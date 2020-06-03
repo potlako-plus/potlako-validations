@@ -10,3 +10,4 @@ from .patient_call_initial_validator import PatientCallInitialFormValidator
 from .physician_review_validator import PhysicianReviewFormValidator
 from .sms_validator import SmsFormValidator
 from .subject_consent_validator import SubjectConsentFormValidator
+from .transport_validator import TransportFormValidator
