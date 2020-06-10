@@ -7,7 +7,7 @@ from ..form_validators import SmsFormValidator
 
 
 @tag('sms')
-class TestSmsorm(TestCase):
+class TestSmsForm(TestCase):
 
     def test_date_reminder_sent_invalid(self):
         cleaned_data = {
