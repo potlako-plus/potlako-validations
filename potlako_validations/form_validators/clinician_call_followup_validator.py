@@ -14,8 +14,8 @@ class ClinicianCallFollowupFormValidator(CRFFormValidator, FormValidator):
 
         self.validate_other_specify('facility_unit',)
 
-        referral_fields = ['referral_date', 'referral_facility',
-                           'referral_reason', 'referral_discussed', ]
+        referral_fields = ['referral_date', 'referral_reason',
+                           'referral_discussed', ]
 
         for field in referral_fields:
             self.required_if(
@@ -23,6 +23,10 @@ class ClinicianCallFollowupFormValidator(CRFFormValidator, FormValidator):
                 field='patient_disposition',
                 field_required=field
             )
+        self.applicable_if(
+            'refer',
+            field='patient_disposition',
+            field_applicable='referral_facility')
 
         self.required_if(
             YES,
