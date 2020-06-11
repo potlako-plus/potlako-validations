@@ -179,6 +179,7 @@ class TestClinicianCallEnrollmentForm(TestCase):
         self.options['referral_facility'] = 'blah'
         self.options['clinician_designation'] = 'blah'
         self.options['referral_fu_date'] = get_utcnow()
+        self.options['referral_discussed'] = NOT_APPLICABLE
         form_validator = ClinicianCallEnrollmentFormValidator(
             cleaned_data=self.options)
         self.assertRaises(ValidationError, form_validator.validate)
@@ -193,6 +194,7 @@ class TestClinicianCallEnrollmentForm(TestCase):
         self.options['referral_facility'] = 'blah'
         self.options['referral_discussed'] = 'blah'
         self.options['referral_fu_date'] = get_utcnow()
+        self.options['clinician_designation'] = NOT_APPLICABLE
         form_validator = ClinicianCallEnrollmentFormValidator(
             cleaned_data=self.options)
         self.assertRaises(ValidationError, form_validator.validate)

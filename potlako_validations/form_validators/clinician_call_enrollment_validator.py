@@ -98,8 +98,7 @@ class ClinicianCallEnrollmentFormValidator(FormValidator):
             field_applicable='referral_unit')
 
         referral_fields = ['referral_reason', 'referral_date',
-                           'referral_facility', 'referral_discussed',
-                           'clinician_designation', 'referral_fu_date', ]
+                           'referral_facility', 'referral_fu_date', ]
 
         for field in referral_fields:
             self.required_if(
@@ -107,6 +106,16 @@ class ClinicianCallEnrollmentFormValidator(FormValidator):
                 field='patient_disposition',
                 field_required=field
             )
+
+        self.applicable_if(
+            'refer',
+            field='patient_disposition',
+            field_applicable='referral_discussed')
+
+        self.applicable_if(
+            'refer',
+            field='patient_disposition',
+            field_applicable='clinician_designation')
 
         self.validate_other_specify('referral_facility',)
 

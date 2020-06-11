@@ -1,4 +1,4 @@
-from edc_constants.constants import YES, NO
+from edc_constants.constants import YES
 from edc_form_validators import FormValidator
 from .crf_form_validator import CRFFormValidator
 
@@ -35,8 +35,8 @@ class ClinicianCallFollowupFormValidator(CRFFormValidator, FormValidator):
             field_required='return_visit_scheduled'
         )
 
-        self.not_required_if(
-            NO,
+        self.required_if(
+            YES,
             field='return_visit_scheduled',
             field_required='return_visit_date'
         )

@@ -1,5 +1,5 @@
 
-from edc_constants.constants import NO, YES
+from edc_constants.constants import NO, OTHER, YES
 from edc_form_validators import FormValidator
 
 
@@ -34,12 +34,16 @@ class PatientCallInitialFormValidator(FormValidator):
         other_fields = ['primary_clinic', 'work_type',
                         'unemployed_reason', 'patient_residence',
                         'enrollment_visit_method', 'tests_type',
-                        'next_ap_facility', 'next_ap_facility_unit',
-                        'call_achievements', ]
+                        'next_ap_facility', 'next_ap_facility_unit', ]
 
         for other_field in other_fields:
             self.validate_other_specify(
                 other_field)
+
+        self.m2m_other_specify(
+            OTHER,
+            m2m_field='call_achievements',
+            field_other='call_achievements_other')
 
         self.required_if_not_none(
             field='hiv_test_date',
