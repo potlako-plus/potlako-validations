@@ -38,6 +38,25 @@ class ClinicianCallEnrollmentFormValidator(FormValidator):
             self._errors.update(message)
             raise ValidationError(message)
 
+        gender = self.cleaned_data.get('gender')
+        cancer_type = self.cleaned_data.get('suspected_cancer')
+
+        if (gender == MALE and cancer_type == 'vulva' or
+                cancer_type == 'cervical' or cancer_type == 'vaginal'):
+            message = {'suspected_cancer':
+                       'The participant is male, suspected cancer specified is'
+                       f' {cancer_type}. Please correct this.'}
+            self._errors.update(message)
+            raise ValidationError(message)
+
+        if (gender == FEMALE and cancer_type == 'penile' or
+                cancer_type == 'prostate'):
+            message = {'suspected_cancer':
+                       'The participant is female, suspected cancer specified '
+                       f'is {cancer_type}. Please correct this.'}
+            self._errors.update(message)
+            raise ValidationError(message)
+
         self.validate_other_specify('facility',)
 
         self.validate_other_specify(
@@ -130,3 +149,13 @@ class ClinicianCallEnrollmentFormValidator(FormValidator):
                        'register first.'}
             self._errors.update(message)
             raise ValidationError(message)
+
+        self.required_if(
+            YES,
+            field='referral_discussed',
+            field_required='clinician_designation')
+
+        fields_other = ['referral_unit', 'investigation_notes', ]
+
+        for field in fields_other:
+            self.validate_other_specify(field=field)
