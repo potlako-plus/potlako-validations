@@ -251,7 +251,6 @@ class TestClinicianCallEnrollmentForm(TestCase):
         self.options['referral_unit'] = 'blah'
         self.options['referral_facility'] = OTHER
         self.options['referral_discussed'] = 'blah'
-        self.options['clinician_designation'] = 'blah'
         self.options['referral_fu_date'] = get_utcnow()
         self.options['referral_facility_other'] = 'blah'
         form_validator = ClinicianCallEnrollmentFormValidator(

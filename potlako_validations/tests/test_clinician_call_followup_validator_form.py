@@ -2,7 +2,7 @@ from dateutil.relativedelta import relativedelta
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 from edc_base.utils import get_utcnow
-from edc_constants.constants import OTHER, YES
+from edc_constants.constants import OTHER, YES, NOT_APPLICABLE
 
 from ..form_validators import ClinicianCallFollowupFormValidator
 from .models import SubjectConsent, SubjectVisit, Appointment
@@ -90,7 +90,7 @@ class TestClinicianCallFollowUpForm(TestCase):
             'subject_visit': self.subject_visit,
             'patient_disposition': 'refer',
             'referral_date': get_utcnow(),
-            'referral_facility': None,
+            'referral_facility': NOT_APPLICABLE,
             'referral_reason': 'blah',
             'referral_discussed': 'blah', }
         form_validator = ClinicianCallFollowupFormValidator(
