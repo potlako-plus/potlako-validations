@@ -117,7 +117,7 @@ class ClinicianCallEnrollmentFormValidator(FormValidator):
             field_applicable='referral_unit')
 
         referral_fields = ['referral_reason', 'referral_date',
-                           'referral_facility', 'referral_fu_date', ]
+                           'referral_facility', ]
 
         for field in referral_fields:
             self.required_if(
