@@ -33,7 +33,7 @@ class PatientCallInitialFormValidator(FormValidator):
 
         other_fields = ['primary_clinic', 'work_type',
                         'unemployed_reason', 'enrollment_visit_method',
-                        'tests_type', 'next_ap_facility']
+                        'next_ap_facility', 'next_ap_facility_unit']
 
         for other_field in other_fields:
             self.validate_other_specify(
@@ -41,13 +41,13 @@ class PatientCallInitialFormValidator(FormValidator):
 
         self.m2m_other_specify(
             OTHER,
-            m2m_field='patient_residence',
-            field_other='patient_residence_other')
+            m2m_field='tests_type',
+            field_other='tests_type_other')
 
         self.m2m_other_specify(
             OTHER,
-            m2m_field='next_ap_facility_unit',
-            field_other='next_ap_facility_unit_other')
+            m2m_field='patient_residence',
+            field_other='patient_residence_other')
 
         self.m2m_other_specify(
             OTHER,
