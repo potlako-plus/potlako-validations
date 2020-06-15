@@ -21,6 +21,7 @@ class SubjectConsentFormValidator(FormValidator):
 
     def clean(self):
         self.screening_identifier = self.cleaned_data.get('screening_identifier')
+        super().clean()
 
         try:
             clinician_enrollment = self.clinician_call_enrollment_cls.objects.get(

@@ -43,15 +43,15 @@ class ClinicianCallEnrollmentFormValidator(FormValidator):
 
         if (gender == MALE and cancer_type in ['vulva', 'cervical', 'vaginal']):
             message = {'suspected_cancer':
-                       'The participant is male, suspected cancer specified is'
+                       'The participant is male, suspected cancer cannot be'
                        f' {cancer_type}. Please correct this.'}
             self._errors.update(message)
             raise ValidationError(message)
 
         if (gender == FEMALE and cancer_type in ['penile', 'prostate']):
             message = {'suspected_cancer':
-                       'The participant is female, suspected cancer specified '
-                       f'is {cancer_type}. Please correct this.'}
+                       'The participant is female, suspected cancer cannot be '
+                       f'{cancer_type}. Please correct this.'}
             self._errors.update(message)
             raise ValidationError(message)
 
