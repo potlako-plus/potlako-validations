@@ -41,16 +41,14 @@ class ClinicianCallEnrollmentFormValidator(FormValidator):
         gender = self.cleaned_data.get('gender')
         cancer_type = self.cleaned_data.get('suspected_cancer')
 
-        if (gender == MALE and cancer_type == 'vulva' or
-                cancer_type == 'cervical' or cancer_type == 'vaginal'):
+        if (gender == MALE and cancer_type in ['vulva', 'cervical', 'vaginal']):
             message = {'suspected_cancer':
                        'The participant is male, suspected cancer specified is'
                        f' {cancer_type}. Please correct this.'}
             self._errors.update(message)
             raise ValidationError(message)
 
-        if (gender == FEMALE and cancer_type == 'penile' or
-                cancer_type == 'prostate'):
+        if (gender == FEMALE and cancer_type in ['penile', 'prostate']):
             message = {'suspected_cancer':
                        'The participant is female, suspected cancer specified '
                        f'is {cancer_type}. Please correct this.'}
@@ -167,11 +165,11 @@ class ClinicianCallEnrollmentFormValidator(FormValidator):
         first_name = self.cleaned_data.get('first_name')
         last_name = self.cleaned_data.get('last_name')
 
-        if first_name and not first_name[0].isupper():
-            message = {'first_name': 'Must start with capital letter.'}
-            self._errors.update(message)
-            raise ValidationError(message)
         if last_name and not last_name[0].isupper():
             message = {'last_name': 'Must start with capital letter.'}
+            self._errors.update(message)
+            raise ValidationError(message)
+        if first_name and not first_name[0].isupper():
+            message = {'first_name': 'Must start with capital letter.'}
             self._errors.update(message)
             raise ValidationError(message)
