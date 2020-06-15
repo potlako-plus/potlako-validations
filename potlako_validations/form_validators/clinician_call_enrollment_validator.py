@@ -95,6 +95,8 @@ class ClinicianCallEnrollmentFormValidator(FormValidator):
 
         self.validate_other_specify('suspected_cancer',)
 
+        self.clean_names_start_with_caps()
+
         identity_key = self.cleaned_data.get('national_identity')[4]
         gender = self.cleaned_data.get('gender')
 
@@ -132,7 +134,7 @@ class ClinicianCallEnrollmentFormValidator(FormValidator):
 
         self.validate_other_specify('referral_facility',)
 
-        responses = ('refer', 'return', )
+        responses = ('refer', 'return',)
         self.required_if(
             *responses,
             field='patient_disposition',
@@ -159,3 +161,17 @@ class ClinicianCallEnrollmentFormValidator(FormValidator):
 
         for field in fields_other:
             self.validate_other_specify(field=field)
+
+    def clean_names_start_with_caps(self):
+
+        first_name = self.cleaned_data.get('first_name')
+        last_name = self.cleaned_data.get('last_name')
+
+        if first_name and not first_name[0].isupper():
+            message = {'first_name': 'Must start with capital letter.'}
+            self._errors.update(message)
+            raise ValidationError(message)
+        if last_name and not last_name[0].isupper():
+            message = {'last_name': 'Must start with capital letter.'}
+            self._errors.update(message)
+            raise ValidationError(message)
