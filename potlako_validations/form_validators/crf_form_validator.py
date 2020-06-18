@@ -18,6 +18,10 @@ class CRFFormValidator:
         return django_apps.get_app_config('edc_facility')
 
     def clean(self):
+        if not self.cleaned_data.get('subject_visit'):
+            raise forms.ValidationError(
+                "Missing Subject Visit.")
+
         self.validate_against_visit_datetime(
             self.cleaned_data.get('report_datetime'))
         if self.instance and not self.instance.id:

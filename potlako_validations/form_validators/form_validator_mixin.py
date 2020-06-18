@@ -43,11 +43,3 @@ class FormValidatorMixin:
                 raise ValidationError(
                     'Please complete Subject Consent form '
                     f'before  proceeding.')
-
-#     @property
-#     def subject_screening(self):
-#         try:
-#             return self.subject_screening_cls.objects.get(
-#                 subject_identifier=self.subject_identifier)
-#         except self.subject_screening_cls.DoesNotExist:
-#             return None

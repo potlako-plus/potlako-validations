@@ -1,4 +1,5 @@
 from django.core.exceptions import ValidationError
+from edc_constants.constants import NOT_APPLICABLE
 from edc_constants.constants import YES, NO, OTHER, MALE, FEMALE
 from edc_form_validators import FormValidator
 
@@ -138,11 +139,20 @@ class ClinicianCallEnrollmentFormValidator(FormValidator):
             field='patient_disposition',
             field_required='referral_date')
 
-        self.applicable_if(
+        self.m2m_single_selection_if(
+            NOT_APPLICABLE,
+            m2m_field='investigation_notes')
+
+        self.m2m_applicable_if(
             YES,
             field='investigated',
-            field_applicable='investigation_notes'
+            m2m_field_applicable='investigation_notes'
         )
+
+        self.m2m_other_specify(
+            OTHER,
+            m2m_field='investigation_notes',
+            field_other='investigation_notes_other')
 
         if self.cleaned_data.get('paper_register') == NO:
             message = {'paper_register': 'Please complete patient\'s paper '
@@ -155,10 +165,7 @@ class ClinicianCallEnrollmentFormValidator(FormValidator):
             field='referral_discussed',
             field_required='clinician_designation')
 
-        fields_other = ['referral_unit', 'investigation_notes', ]
-
-        for field in fields_other:
-            self.validate_other_specify(field=field)
+        self.validate_other_specify(field='referral_unit')
 
     def clean_names_start_with_caps(self):
 
@@ -173,3 +180,24 @@ class ClinicianCallEnrollmentFormValidator(FormValidator):
             message = {'first_name': 'Must start with capital letter.'}
             self._errors.update(message)
             raise ValidationError(message)
+
+    def m2m_applicable_if(self, *responses, field=None, m2m_field_applicable=None):
+
+        qs = self.cleaned_data.get(m2m_field_applicable)
+        if qs and qs.count() >= 1:
+            selected = {obj.short_name: obj.name for obj in qs}
+            if (self.cleaned_data.get(field) in responses and
+                    NOT_APPLICABLE in selected):
+                message = {
+                    m2m_field_applicable:
+                    'This field is applicable.'}
+                self._errors.update(message)
+                raise ValidationError(message)
+            elif (self.cleaned_data.get(field) not in responses and
+                    NOT_APPLICABLE not in selected):
+                message = {
+                    m2m_field_applicable:
+                    'This field is not applicable.'}
+                self._errors.update(message)
+                raise ValidationError(message)
+

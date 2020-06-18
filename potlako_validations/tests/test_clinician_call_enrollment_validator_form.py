@@ -135,7 +135,6 @@ class TestClinicianCallEnrollmentForm(TestCase):
         self.options['referral_facility'] = 'blah'
         self.options['referral_discussed'] = 'blah'
         self.options['clinician_designation'] = 'blah'
-        self.options['referral_fu_date'] = get_utcnow()
         form_validator = ClinicianCallEnrollmentFormValidator(
             cleaned_data=self.options)
         self.assertRaises(ValidationError, form_validator.validate)
@@ -149,7 +148,6 @@ class TestClinicianCallEnrollmentForm(TestCase):
         self.options['referral_facility'] = 'blah'
         self.options['referral_discussed'] = 'blah'
         self.options['clinician_designation'] = 'blah'
-        self.options['referral_fu_date'] = get_utcnow()
         form_validator = ClinicianCallEnrollmentFormValidator(
             cleaned_data=self.options)
         self.assertRaises(ValidationError, form_validator.validate)
@@ -164,7 +162,6 @@ class TestClinicianCallEnrollmentForm(TestCase):
         self.options['referral_discussed'] = 'blah'
         self.options['clinician_designation'] = 'blah'
         self.options['referral_unit'] = NOT_APPLICABLE
-        self.options['referral_fu_date'] = get_utcnow()
         form_validator = ClinicianCallEnrollmentFormValidator(
             cleaned_data=self.options)
         self.assertRaises(ValidationError, form_validator.validate)
@@ -178,7 +175,6 @@ class TestClinicianCallEnrollmentForm(TestCase):
         self.options['referral_unit'] = 'blah'
         self.options['referral_facility'] = 'blah'
         self.options['clinician_designation'] = 'blah'
-        self.options['referral_fu_date'] = get_utcnow()
         self.options['referral_discussed'] = NOT_APPLICABLE
         form_validator = ClinicianCallEnrollmentFormValidator(
             cleaned_data=self.options)
@@ -192,27 +188,12 @@ class TestClinicianCallEnrollmentForm(TestCase):
         self.options['referral_reason'] = 'blah'
         self.options['referral_unit'] = 'blah'
         self.options['referral_facility'] = 'blah'
-        self.options['referral_discussed'] = 'blah'
-        self.options['referral_fu_date'] = get_utcnow()
-        self.options['clinician_designation'] = NOT_APPLICABLE
+        self.options['referral_discussed'] = YES
+        self.options['clinician_designation'] = None
         form_validator = ClinicianCallEnrollmentFormValidator(
             cleaned_data=self.options)
         self.assertRaises(ValidationError, form_validator.validate)
         self.assertIn('clinician_designation', form_validator._errors)
-
-    def test_referral_fu_date_invalid1(self):
-
-        self.options['patient_disposition'] = 'refer'
-        self.options['referral_date'] = get_utcnow()
-        self.options['referral_reason'] = 'blah'
-        self.options['referral_unit'] = 'blah'
-        self.options['referral_facility'] = 'blah'
-        self.options['referral_discussed'] = 'blah'
-        self.options['clinician_designation'] = 'blah'
-        form_validator = ClinicianCallEnrollmentFormValidator(
-            cleaned_data=self.options)
-        self.assertRaises(ValidationError, form_validator.validate)
-        self.assertIn('referral_fu_date', form_validator._errors)
 
     def test_referral_facility_invalid1(self):
 
@@ -221,8 +202,6 @@ class TestClinicianCallEnrollmentForm(TestCase):
         self.options['referral_reason'] = 'blah'
         self.options['referral_unit'] = 'blah'
         self.options['referral_discussed'] = 'blah'
-        self.options['clinician_designation'] = 'blah'
-        self.options['referral_fu_date'] = get_utcnow()
         form_validator = ClinicianCallEnrollmentFormValidator(
             cleaned_data=self.options)
         self.assertRaises(ValidationError, form_validator.validate)
@@ -236,8 +215,6 @@ class TestClinicianCallEnrollmentForm(TestCase):
         self.options['referral_unit'] = 'blah'
         self.options['referral_facility'] = OTHER
         self.options['referral_discussed'] = 'blah'
-        self.options['clinician_designation'] = 'blah'
-        self.options['referral_fu_date'] = get_utcnow()
         form_validator = ClinicianCallEnrollmentFormValidator(
             cleaned_data=self.options)
         self.assertRaises(ValidationError, form_validator.validate)
@@ -251,7 +228,6 @@ class TestClinicianCallEnrollmentForm(TestCase):
         self.options['referral_unit'] = 'blah'
         self.options['referral_facility'] = OTHER
         self.options['referral_discussed'] = 'blah'
-        self.options['referral_fu_date'] = get_utcnow()
         self.options['referral_facility_other'] = 'blah'
         form_validator = ClinicianCallEnrollmentFormValidator(
             cleaned_data=self.options)
