@@ -1,7 +1,7 @@
 from django.apps import apps as django_apps
 from django.core.exceptions import ValidationError
 from edc_base.utils import age, get_utcnow
-from edc_constants.constants import MALE, FEMALE
+from edc_constants.constants import MALE, FEMALE, NO
 from edc_form_validators import FormValidator
 
 
@@ -43,6 +43,8 @@ class SubjectConsentFormValidator(FormValidator):
 
         self.validate_dob(self.screening_identifier)
         self.validate_identity_gender()
+        self.validate_verbal_script_field()
+        self.validate_citizen_field()
 
     def validate_identity_gender(self):
 
@@ -94,5 +96,24 @@ class SubjectConsentFormValidator(FormValidator):
                        f'provided in the Clinician Call Enrollment '
                        f' form. Expected \'{clinician_call_value}\' '
                        f'got \'{field_value}\''}
+            self._errors.update(message)
+            raise ValidationError(message)
+
+    def validate_verbal_script_field(self):
+        verbal_script = self.cleaned_data['verbal_script']
+
+        if verbal_script == NO:
+            message = {'verbal_script':
+                       'Please provide participant\'s details on verbal script'
+                       ' and sign the document.'}
+            self._errors.update(message)
+            raise ValidationError(message)
+
+    def validate_citizen_field(self):
+        verbal_script = self.cleaned_data['citizen']
+
+        if verbal_script == NO:
+            message = {'citizen':
+                       'Participant is not a citizen of Botswana.'}
             self._errors.update(message)
             raise ValidationError(message)
