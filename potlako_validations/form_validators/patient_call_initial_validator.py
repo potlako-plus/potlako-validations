@@ -31,18 +31,13 @@ class PatientCallInitialFormValidator(FormValidator):
             field='other_facility',
             field_required='facility_number',)
 
-        other_fields = ['primary_clinic', 'work_type',
+        other_fields = ['primary_clinic', 'work_type', 'residential_district',
                         'unemployed_reason', 'enrollment_visit_method',
                         'next_ap_facility', 'next_ap_facility_unit']
 
         for other_field in other_fields:
             self.validate_other_specify(
                 other_field)
-
-        self.m2m_other_specify(
-            OTHER,
-            m2m_field='tests_type',
-            field_other='tests_type_other')
 
         self.m2m_other_specify(
             OTHER,
@@ -62,8 +57,3 @@ class PatientCallInitialFormValidator(FormValidator):
             YES,
             field='hiv_test_date_estimated',
             field_required='hiv_test_date_estimation',)
-
-        self.m2m_required_if(
-            response=YES,
-            field='tests_ordered',
-            m2m_field='tests_type')
