@@ -15,10 +15,15 @@ class MissedVisitFormValidator(CRFFormValidator, FormValidator):
             field='inquired',
             field_required='not_inquired_reason')
 
+        self.not_applicable_if(
+            NO,
+            field='transport_need',
+            field_applicable='transport_support')
+
         self.required_if(
             NO,
             field='transport_support',
-            field_required='transport_need')
+            field_required='trans_support_comments')
 
         self.required_if(
             YES,
@@ -32,6 +37,6 @@ class MissedVisitFormValidator(CRFFormValidator, FormValidator):
             self.validate_other_specify(field)
 
         self.validate_next_appointment_date(
-            next_ap_date=self.cleaned_data.get('next_appointment'))
+            next_ap_date=self.cleaned_data.get('next_appointment_date'))
 
         super().clean()
