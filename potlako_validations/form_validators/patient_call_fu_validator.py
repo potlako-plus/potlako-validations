@@ -1,11 +1,20 @@
-from edc_constants.constants import NO, YES, OTHER
+from django.apps import apps as django_apps
+from edc_constants.constants import NO, YES, OTHER, NOT_APPLICABLE
 from edc_form_validators import FormValidator
 from .crf_form_validator import CRFFormValidator
+from django.core.exceptions import ValidationError
 
 
 class PatientCallFuFormValidator(CRFFormValidator, FormValidator):
 
+    patient_call_fu_model = 'potlako_subject.patientcallfollowup'
+
+    @property
+    def patient_call_fu_cls(self):
+        return django_apps.get_model(self.patient_call_fu_model)
+
     def clean(self):
+        self.validate_first_specialist_visit()
 
         self.subject_identifier = self.cleaned_data.get(
             'subject_visit').appointment.subject_identifier
@@ -73,3 +82,23 @@ class PatientCallFuFormValidator(CRFFormValidator, FormValidator):
             next_ap_date=self.cleaned_data.get('next_appointment_date'))
 
         super().clean()
+
+    def validate_first_specialist_visit(self):
+        subject_identifier = self.cleaned_data.get(
+            'subject_visit').subject_identifier
+        qs = self.patient_call_fu_cls.objects.filter(
+            subject_visit__subject_identifier=subject_identifier)
+        if self.instance.pk is not None:
+            qs = qs.exclude(pk=self.instance.pk)
+
+        responses = list()
+        for patient_call_fu in qs:
+            responses.append(patient_call_fu.first_specialist_visit)
+
+        first_specialist_visit = self.cleaned_data.get(
+            'first_specialist_visit')
+        if YES in responses and first_specialist_visit != NOT_APPLICABLE:
+            message = {
+                'first_specialist_visit': 'This field is not applicable'}
+            self._errors.update(message)
+            raise ValidationError(message)
