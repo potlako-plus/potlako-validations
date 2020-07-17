@@ -1,4 +1,5 @@
-
+from django.apps import apps as django_apps
+from django.core.exceptions import ValidationError
 from edc_constants.constants import NO, OTHER, YES
 from edc_form_validators import FormValidator
 
@@ -10,6 +11,11 @@ class PatientCallInitialFormValidator(FormValidator):
             YES,
             field='work_status',
             field_required='work_type',)
+
+        self.required_if(
+            YES,
+            field='potlako_sms_received',
+            field_required='sms_platform',)
 
         self.required_if(
             NO,
@@ -31,9 +37,10 @@ class PatientCallInitialFormValidator(FormValidator):
             field='other_facility',
             field_required='facility_number',)
 
-        other_fields = ['primary_clinic', 'work_type', 'residential_district',
-                        'unemployed_reason', 'enrollment_visit_method',
-                        'next_ap_facility', 'next_ap_facility_unit']
+        other_fields = ['primary_clinic', 'sms_platform', 'work_type',
+                        'residential_district', 'unemployed_reason',
+                        'enrollment_visit_method', 'next_ap_facility',
+                        'next_ap_facility_unit']
 
         for other_field in other_fields:
             self.validate_other_specify(
@@ -57,3 +64,19 @@ class PatientCallInitialFormValidator(FormValidator):
             YES,
             field='hiv_test_date_estimated',
             field_required='hiv_test_date_estimation',)
+
+#     def update_locator_fields(self):
+#         subject_locator_cls = django_apps.get_model(
+#             'potlako_subject.subjectlocator')
+#
+#         try:
+#             subject_locator_cls.objects.get(
+#                 subject_identifier=self.cleaned_data.get(
+#                     'subject_visi').appointment.subject_identifier)
+#         except subject_locator_cls.DoesNotExist:
+#             raise ValidationError(
+#                 'Please complete Subject Locator form '
+#                 f'before  proceeding.')
+#         else:
+#             'residential_district'
+#             'patient_kgotla', 'patient_number', 'patient_contact'

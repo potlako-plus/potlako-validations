@@ -139,21 +139,6 @@ class ClinicianCallEnrollmentFormValidator(FormValidator):
             field='patient_disposition',
             field_required='referral_date')
 
-        self.m2m_single_selection_if(
-            NOT_APPLICABLE,
-            m2m_field='investigation_notes')
-
-        self.m2m_applicable_if(
-            YES,
-            field='investigated',
-            m2m_field_applicable='investigation_notes'
-        )
-
-        self.m2m_other_specify(
-            OTHER,
-            m2m_field='investigation_notes',
-            field_other='investigation_notes_other')
-
         if self.cleaned_data.get('paper_register') == NO:
             message = {'paper_register': 'Please complete patient\'s paper '
                        'register first.'}
