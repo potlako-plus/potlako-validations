@@ -63,8 +63,6 @@ class ClinicianCallEnrollmentFormValidator(FormValidator):
             other_specify_field='unit_other'
         )
 
-        self.validate_other_specify('nearest_facility',)
-
         self.validate_other_specify(
             field='kin_relationship',
             other_specify_field='kin_relation_other'
@@ -144,11 +142,6 @@ class ClinicianCallEnrollmentFormValidator(FormValidator):
                        'register first.'}
             self._errors.update(message)
             raise ValidationError(message)
-
-        self.required_if(
-            YES,
-            field='referral_discussed',
-            field_required='clinician_designation')
 
         self.validate_other_specify(field='referral_unit')
 
