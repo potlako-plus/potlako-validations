@@ -7,15 +7,8 @@ class TransportFormValidator(CRFFormValidator, FormValidator):
 
     def clean(self):
 
-        self.m2m_required_if(
-            YES,
-            field='is_criteria_met',
-            m2m_field='transport_type',)
-
-        self.m2m_required_if(
-            response=YES,
-            field='is_criteria_met',
-            m2m_field='criteria_met')
+        self.subject_identifier = self.cleaned_data.get(
+            'subject_visit').appointment.subject_identifier
 
         other_fields = ['visit_facility', 'vehicle_status',
                         'bus_voucher_status', 'transport_type']
