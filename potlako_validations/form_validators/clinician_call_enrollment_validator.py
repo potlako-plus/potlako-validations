@@ -178,3 +178,4 @@ class ClinicianCallEnrollmentFormValidator(FormValidator):
                     'This field is not applicable.'}
                 self._errors.update(message)
                 raise ValidationError(message)
+
