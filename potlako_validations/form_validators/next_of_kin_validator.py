@@ -21,9 +21,3 @@ class NextOfKinFormValidator(FormValidator):
                        'telephone number is required'}
             self._errors.update(message)
             raise ValidationError(message)
-
-
-
-
-
-
