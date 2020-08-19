@@ -2,7 +2,6 @@ from django import forms
 from django.apps import apps as django_apps
 from django.core.exceptions import ValidationError
 from edc_form_validators import FormValidator
-import datetime
 
 
 class ScreeningFormValidator(FormValidator):
@@ -30,20 +29,3 @@ class ScreeningFormValidator(FormValidator):
                     f'expected {clinician_call_enrollment_obj.facility}'}
                 self._errors.update(message)
                 raise ValidationError(message)
-
-        report_datetime = self.cleaned_data.get('report_datetime')
-        if report_datetime.date() < datetime.date.today():
-            message = {'report_datetime':
-                       'Past dates are not allowed '}
-            self._errors.update(message)
-            raise ValidationError(message)
-
-
-
-
-
-
-
-
-
-
