@@ -13,6 +13,8 @@ SECRET_KEY = '!%m93e40ob0k8ro9$2%_btmp%uv#1x%cme59t&r0ieofqfnp28'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+SITE_ID = 40
+
 ALLOWED_HOSTS = []
 
 # Application definition
@@ -27,8 +29,10 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django_crypto_fields.apps.AppConfig',
     'django_revision.apps.AppConfig',
-    'edc_protocol.apps.AppConfig',
+    'edc_action_item.apps.AppConfig',
     'edc_device.apps.AppConfig',
+    'edc_locator.apps.AppConfig',
+    'edc_protocol.apps.AppConfig',
     'potlako_validations.apps.AppConfig',
 ]
 
@@ -40,6 +44,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'edc_dashboard.middleware.DashboardMiddleware',
+    'edc_subject_dashboard.middleware.DashboardMiddleware',
+    'edc_lab_dashboard.middleware.DashboardMiddleware'
 ]
 
 ROOT_URLCONF = 'potlako_validations.urls'
