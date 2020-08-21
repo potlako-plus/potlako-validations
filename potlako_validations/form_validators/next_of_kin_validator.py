@@ -14,10 +14,6 @@ class NextOfKinFormValidator(FormValidator):
         kin_cell = self.cleaned_data.get('kin_cell')
         kin_telephone = self.cleaned_data.get('kin_telephone')
 
-        if kin_cell == '' and kin_telephone == '':
-            message = {'kin_cell':
-                       'A cell number or',
-                       'kin_telephone':
-                       'telephone number is required'}
-            self._errors.update(message)
+        if not kin_cell and not kin_telephone:
+            message = 'A cell number or telephone number is required'
             raise ValidationError(message)
