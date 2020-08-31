@@ -1,4 +1,7 @@
 from .clinician_call_enrollment_validator import ClinicianCallEnrollmentFormValidator
+from .cancer_diagnosis_and_treatment_validator import CancerDiagnosisAndTreatmentFormValidator
+from .cancer_diagnosis_and_treatment_endpoint_validator import (
+    CancerDiagnosisAndTreatmentEndpointFormValidator)
 from .home_visit_validator import HomeVisitFormValidator
 from .investigations_ordered_validator import InvestigationsOrderedFormValidator
 from .investigations_resulted_validator import InvestigationsResultedFormValidator
@@ -12,4 +15,6 @@ from .sms_validator import SmsFormValidator
 from .subject_consent_validator import SubjectConsentFormValidator
 from .subject_locator_validator import SubjectLocatorFormValidator
 from .subject_screening_validator import ScreeningFormValidator
+from .symptom_and_care_seeking_validator import SymptomAndCareSeekingFormValidator
+from .symptom_and_care_seeking_validator import SymptomAssessmentFormValidator
 from .transport_validator import TransportFormValidator
