@@ -1,3 +1,4 @@
+from .baseline_clinical_summary_validator import BaselineClinicalSummaryFormValidator
 from .clinician_call_enrollment_validator import ClinicianCallEnrollmentFormValidator
 from .cancer_diagnosis_and_treatment_validator import CancerDiagnosisAndTreatmentFormValidator
 from .cancer_diagnosis_and_treatment_endpoint_validator import (
@@ -17,4 +18,5 @@ from .subject_locator_validator import SubjectLocatorFormValidator
 from .subject_screening_validator import ScreeningFormValidator
 from .symptom_and_care_seeking_validator import SymptomAndCareSeekingFormValidator
 from .symptom_and_care_seeking_validator import SymptomAssessmentFormValidator
+from .symptoms_and_care_seeking_endpoint_validator import SymptomsAndCareSeekingEndpointFormValidator
 from .transport_validator import TransportFormValidator
