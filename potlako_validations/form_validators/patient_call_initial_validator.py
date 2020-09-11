@@ -37,7 +37,7 @@ class PatientCallInitialFormValidator(FormValidator):
             field='other_facility',
             field_required='facility_number',)
 
-        other_fields = ['primary_clinic', 'sms_platform', 'work_type',
+        other_fields = ['primary_clinic', 'work_type', 'source_of_info',
                         'residential_district', 'unemployed_reason',
                         'enrollment_visit_method', 'next_ap_facility',
                         'next_ap_facility_unit']
@@ -45,6 +45,21 @@ class PatientCallInitialFormValidator(FormValidator):
         for other_field in other_fields:
             self.validate_other_specify(
                 other_field)
+
+        self.required_if(
+            YES,
+            field='heard_of_potlako',
+            field_required='source_of_info')
+
+        self.m2m_required_if(
+            YES,
+            field='potlako_sms_received',
+            m2m_field='sms_platform')
+
+        self.m2m_other_specify(
+            OTHER,
+            m2m_field='sms_platform',
+            field_other='sms_platform_other')
 
         self.m2m_other_specify(
             OTHER,
