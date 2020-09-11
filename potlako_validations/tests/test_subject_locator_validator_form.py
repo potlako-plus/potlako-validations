@@ -36,7 +36,7 @@ class TestSubjectLocatorForm(TestCase):
         self.options['alt_contact_cell'] = None
         try:
             form_validator.validate()
-        except  ValidationError as e:
+        except ValidationError as e:
             self.fail(f'ValidationError unexpectedly raised. Got{e}')
 
     def test_next_of_kin_has_tel(self):
@@ -45,7 +45,7 @@ class TestSubjectLocatorForm(TestCase):
         self.options['alt_contact_tel'] = None
         try:
             form_validator.validate()
-        except  ValidationError as e:
+        except ValidationError as e:
             self.fail(f'ValidationError unexpectedly raised. Got{e}')
 
     def test_has_alt_contact(self):
@@ -59,5 +59,5 @@ class TestSubjectLocatorForm(TestCase):
 
         try:
             form_validator.validate()
-        except  ValidationError as e:
+        except ValidationError as e:
             self.fail(f'ValidationError unexpectedly raised. Got{e}')
