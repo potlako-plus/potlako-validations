@@ -1,6 +1,7 @@
 from django import forms
 from django.apps import apps as django_apps
 from django.core.exceptions import ValidationError
+from edc_constants.constants import NO
 from edc_form_validators import FormValidator
 
 
@@ -29,3 +30,11 @@ class ScreeningFormValidator(FormValidator):
                     f'expected {clinician_call_enrollment_obj.facility}'}
                 self._errors.update(message)
                 raise ValidationError(message)
+
+        self.validate_other_specify(field='enrollment_site', )
+        self.required_if(
+            NO,
+            field='enrollment_interest',
+            field_required='disinterest_reason', )
+
+        self.validate_other_specify(field='disinterest_reason', )
