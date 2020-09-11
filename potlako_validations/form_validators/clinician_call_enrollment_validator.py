@@ -1,3 +1,4 @@
+from django.apps import apps as django_apps
 from django.core.exceptions import ValidationError
 from edc_constants.constants import NOT_APPLICABLE
 from edc_constants.constants import YES, NO, OTHER, MALE, FEMALE
@@ -5,6 +6,10 @@ from edc_form_validators import FormValidator
 
 
 class ClinicianCallEnrollmentFormValidator(FormValidator):
+
+    @property
+    def facility_app_config(self):
+        return django_apps.get_app_config('edc_facility')
 
     def clean(self):
         super().clean()
@@ -145,6 +150,39 @@ class ClinicianCallEnrollmentFormValidator(FormValidator):
 
         self.validate_other_specify(field='referral_unit')
 
+        patient_contact = self.cleaned_data['patient_contact']
+
+        if patient_contact == YES:
+            if (not self.cleaned_data['primary_cell']
+                    and not self.cleaned_data['telephone_number']):
+                message = {'patient_contact':
+                           'Please provide the patient\'s primary cell number '
+                           'or telephone number.'}
+                self._errors.update(message)
+                raise ValidationError(message)
+
+        fields = ['primary_cell', 'secondary_cell', 'telephone_number']
+        for field in fields:
+            self.not_required_if(
+                NO,
+                field='patient_contact',
+                field_required=field,
+                inverse=False, )
+
+        secondary_cell = self.cleaned_data['secondary_cell']
+
+        if secondary_cell and not self.cleaned_data['primary_cell']:
+            message = {'secondary_cell':
+                       'Please provide the patient\'s primary cell before their'
+                       ' secondary'}
+            self._errors.update(message)
+            raise ValidationError(message)
+
+        self.required_if(
+            YES,
+            field='investigated',
+            field_required='tests_ordered', )
+
     def clean_names_start_with_caps(self):
 
         first_name = self.cleaned_data.get('first_name')
@@ -159,7 +197,8 @@ class ClinicianCallEnrollmentFormValidator(FormValidator):
             self._errors.update(message)
             raise ValidationError(message)
 
-    def m2m_applicable_if(self, *responses, field=None, m2m_field_applicable=None):
+    def m2m_applicable_if(
+            self, *responses, field=None, m2m_field_applicable=None):
 
         qs = self.cleaned_data.get(m2m_field_applicable)
         if qs and qs.count() >= 1:
@@ -178,4 +217,3 @@ class ClinicianCallEnrollmentFormValidator(FormValidator):
                     'This field is not applicable.'}
                 self._errors.update(message)
                 raise ValidationError(message)
-
