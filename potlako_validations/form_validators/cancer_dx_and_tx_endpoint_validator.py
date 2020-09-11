@@ -4,7 +4,7 @@ from edc_form_validators import FormValidator
 from django.core.exceptions import ValidationError
 
 
-class CancerDiagnosisAndTreatmentEndpointFormValidator(FormValidator):
+class CancerDxAndTxEndpointFormValidator(FormValidator):
 
     def clean(self):
 
