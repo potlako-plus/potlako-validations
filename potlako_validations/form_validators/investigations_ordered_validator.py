@@ -1,4 +1,4 @@
-from edc_constants.constants import YES
+from edc_constants.constants import YES, OTHER
 from edc_form_validators import FormValidator
 from .crf_form_validator import CRFFormValidator
 
@@ -20,10 +20,10 @@ class InvestigationsOrderedFormValidator(CRFFormValidator, FormValidator):
             field='tests_ordered_type',
             field_required='imaging_test_status')
 
-        self.required_if(
+        self.m2m_required_if(
             'imaging',
             field='tests_ordered_type',
-            field_required='imaging_test_type')
+            m2m_field='imaging_test_type')
 
         self.required_if(
             YES,
@@ -35,6 +35,11 @@ class InvestigationsOrderedFormValidator(CRFFormValidator, FormValidator):
             field='pathology_test',
             field_required='fna_location',)
 
+        self.m2m_other_specify(
+            OTHER,
+            m2m_field='pathology_test',
+            field_other='pathology_test_other')
+
         self.required_if(
             'pathology',
             field='tests_ordered_type',
@@ -44,6 +49,11 @@ class InvestigationsOrderedFormValidator(CRFFormValidator, FormValidator):
             YES,
             field='tests_ordered_type',
             field_required='pathology_tests_ordered')
+
+        self.m2m_other_specify(
+            OTHER,
+            m2m_field='tests_ordered_type',
+            field_other='tests_ordered_type_other')
 
         self.required_if(
             'ultrasound_other',
@@ -60,10 +70,12 @@ class InvestigationsOrderedFormValidator(CRFFormValidator, FormValidator):
             field='imaging_test_type',
             field_required='mri_tests',)
 
-        other_fields = ['facility_ordered', 'imaging_test_type', ]
+        self.m2m_other_specify(
+            OTHER,
+            m2m_field='imaging_test_type',
+            field_other='imaging_test_type_other')
 
-        for other_field in other_fields:
-            self.validate_other_specify(
-                other_field)
+        self.validate_other_specify(
+            'facility_ordered')
 
         super().clean()
