@@ -1,4 +1,4 @@
-from edc_constants.constants import YES, OTHER
+from edc_constants.constants import OTHER, NO
 from edc_form_validators import FormValidator
 from .crf_form_validator import CRFFormValidator
 
@@ -15,12 +15,20 @@ class TransportFormValidator(CRFFormValidator, FormValidator):
         for field in other_fields:
             self.validate_other_specify(field)
 
-        m2m_fields = ['criteria_met', 'housemate']
+        self.m2m_other_specify(
+            OTHER,
+            m2m_field='criteria_met',
+            field_other='criteria_met_other')
 
-        for m2m_field in m2m_fields:
-            self.m2m_other_specify(OTHER,
-                                   m2m_field=m2m_field,
-                                   field_other=m2m_field + '_other')
+        self.not_applicable_if(
+            NO,
+            field='criteria_met',
+            field_applicable='transport_type')
+
+        self.not_required_if(
+            NO,
+            field='criteria_met',
+            required_field='criteria_met')
 
         self.validate_other_specify(
             field='cash_transfer_status',
