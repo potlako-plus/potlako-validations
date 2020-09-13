@@ -1,4 +1,4 @@
-from edc_constants.constants import YES
+from edc_constants.constants import YES, NO, OTHER
 from edc_form_validators import FormValidator
 
 
@@ -17,7 +17,17 @@ class SymptomAndCareSeekingFormValidator(FormValidator):
                 field='symptoms_discussion',
                 field_required=field_required)
 
-        self.validate_other_specify(field='discussion_person')
+        self.required_if(
+            NO,
+            field='symptoms_discussion',
+            field_required='reason_no_discussion')
+
+        self.validate_other_specify(field='reason_no_discussion')
+
+        self.m2m_other_specify(
+            OTHER,
+            m2m_field='discussion_person',
+            field_other='discussion_person_other')
 
         req_fields = {
             'discussion_date_estimated': 'discussion_date_estimation',
