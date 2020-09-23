@@ -1,4 +1,4 @@
-from edc_constants.constants import OTHER, NO
+from edc_constants.constants import OTHER, NO, YES
 from edc_form_validators import FormValidator
 from .crf_form_validator import CRFFormValidator
 
@@ -25,11 +25,11 @@ class TransportFormValidator(CRFFormValidator, FormValidator):
             field='criteria_met',
             field_applicable='transport_type')
 
-        self.not_required_if(
-            NO,
-            field='criteria_met',
-            required_field='criteria_met')
-
+        self.m2m_required_if(
+            YES,
+            field='is_criteria_met',
+            m2m_field='criteria_met')
+        
         self.validate_other_specify(
             field='cash_transfer_status',
             other_stored_value='not_successful')
