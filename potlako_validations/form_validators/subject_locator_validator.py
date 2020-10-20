@@ -7,19 +7,24 @@ from edc_locator.forms import (
 class SubjectLocatorFormValidator(BaseSubjectLocatorFormValidator):
 
     def validate_indirect_contact(self):
+        
         self.required_if(
             YES, field='may_contact_indirectly',
             field_required='indirect_contact_name')
+        
         self.required_if(
             YES, field='may_contact_indirectly',
             field_required='indirect_contact_relation')
-        self.required_if(
-            YES, field='may_contact_indirectly',
-            field_required='indirect_contact_cell')
-        for field in ['indirect_contact_cell_alt', 'indirect_contact_phone']:
-            self.not_required_if(
-                NO, field='may_contact_indirectly', field_required=field,
-                inverse=False)
+        
+        if self.cleaned_data.get('may_contact_indirectly') == YES:
+            if (not self.cleaned_data.get('indirect_contact_cell') and
+                not self.cleaned_data.get('indirect_contact_phone')):
+                message = {'may_contact_indirectly':
+                       ('Please provide either cell number or telephone number'
+                       ' of next of kin.')}
+                self._errors.update(message)
+                raise ValidationError(message)
+        
         self.not_applicable_if(
             NO, field='may_contact_indirectly',
             field_applicable='has_alt_contact')
