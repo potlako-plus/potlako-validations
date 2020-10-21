@@ -3,8 +3,10 @@ from django.core.exceptions import ValidationError
 from edc_constants.constants import NO, OTHER, YES
 from edc_form_validators import FormValidator
 
+from .crf_form_validator import CRFFormValidator
 
-class PatientCallInitialFormValidator(FormValidator):
+
+class PatientCallInitialFormValidator(CRFFormValidator, FormValidator):
 
     def clean(self):
         self.required_if(
@@ -79,19 +81,9 @@ class PatientCallInitialFormValidator(FormValidator):
             YES,
             field='hiv_test_date_estimated',
             field_required='hiv_test_date_estimation',)
+        
+        self.validate_next_appointment_date(
+            next_ap_date=self.cleaned_data.get('next_appointment_date'))
+        
+        super().clean()
 
-#     def update_locator_fields(self):
-#         subject_locator_cls = django_apps.get_model(
-#             'potlako_subject.subjectlocator')
-#
-#         try:
-#             subject_locator_cls.objects.get(
-#                 subject_identifier=self.cleaned_data.get(
-#                     'subject_visi').appointment.subject_identifier)
-#         except subject_locator_cls.DoesNotExist:
-#             raise ValidationError(
-#                 'Please complete Subject Locator form '
-#                 f'before  proceeding.')
-#         else:
-#             'residential_district'
-#             'patient_kgotla', 'patient_number', 'patient_contact'
