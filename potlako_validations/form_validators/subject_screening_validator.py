@@ -1,7 +1,7 @@
 from django import forms
 from django.apps import apps as django_apps
 from django.core.exceptions import ValidationError
-from edc_constants.constants import NO
+from edc_constants.constants import NO, YES
 from edc_form_validators import FormValidator
 
 
@@ -32,6 +32,15 @@ class ScreeningFormValidator(FormValidator):
                 raise ValidationError(message)
 
         self.validate_other_specify(field='enrollment_site', )
+        
+        residency_fields = ['residency', 'nationality']
+        
+        for residency_field in residency_fields:
+            self.applicable_if(
+                YES,
+                field='enrollment_interest',
+                field_applicable=residency_field)
+            
         self.required_if(
             NO,
             field='enrollment_interest',
