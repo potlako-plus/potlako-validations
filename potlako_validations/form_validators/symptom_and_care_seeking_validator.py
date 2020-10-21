@@ -6,7 +6,10 @@ class SymptomAndCareSeekingFormValidator(FormValidator):
 
     def clean(self):
 
-        self.validate_other_specify(field='symptoms_present')
+        self.m2m_other_specify(
+            OTHER,
+            m2m_field='symptoms_present',
+            field_other='symptoms_present_other')
 
         fields_required = ['discussion_person', 'discussion_date',
                            'medical_advice', 'discussion_date_estimated']
