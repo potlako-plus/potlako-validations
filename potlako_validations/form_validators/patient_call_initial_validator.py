@@ -39,7 +39,7 @@ class PatientCallInitialFormValidator(CRFFormValidator, FormValidator):
             field='other_facility',
             field_required='facility_number',)
 
-        other_fields = ['primary_clinic', 'work_type', 'source_of_info',
+        other_fields = ['primary_clinic', 'work_type',
                         'residential_district', 'unemployed_reason',
                         'enrollment_visit_method', 'next_ap_facility',
                         'next_ap_facility_unit']
@@ -57,6 +57,11 @@ class PatientCallInitialFormValidator(CRFFormValidator, FormValidator):
             YES,
             field='potlako_sms_received',
             m2m_field='sms_platform')
+        
+        self.m2m_other_specify(
+            OTHER,
+            m2m_field='source_of_info',
+            field_other='source_of_info_other')
 
         self.m2m_other_specify(
             OTHER,
