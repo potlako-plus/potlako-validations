@@ -9,6 +9,10 @@ from .crf_form_validator import CRFFormValidator
 class PatientCallInitialFormValidator(CRFFormValidator, FormValidator):
 
     def clean(self):
+        
+        self.subject_identifier = self.cleaned_data.get(
+            'subject_visit').appointment.subject_identifier
+            
         self.required_if(
             YES,
             field='work_status',
