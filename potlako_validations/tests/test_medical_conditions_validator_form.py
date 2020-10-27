@@ -26,7 +26,7 @@ class TestMedicalConditionsForm(TestCase):
         cleaned_data = {
             'subject_visit': self.subject_visit,
             'diagnosis_date_estimate': NO,
-            'on_medicationon_medication': NO,
+            'on_medicationon': NO,
             'medical_condition': 'blah'
         }
         form_validator = MedicalConditionsFormValidator(
@@ -41,7 +41,7 @@ class TestMedicalConditionsForm(TestCase):
             'subject_visit': self.subject_visit,
             'diagnosis_date_estimate': YES,
             'diagnosis_date_estimation': None,
-            'on_medicationon_medication': NO,
+            'on_medicationon': NO,
             'medical_condition': 'blah'
         }
         form_validator = MedicalConditionsFormValidator(
@@ -63,21 +63,6 @@ class TestMedicalConditionsForm(TestCase):
         self.assertRaises(ValidationError, form_validator.clean)
         self.assertIn('treatment_type', form_validator._errors)
 
-    def test_treatment_name_invalid(self):
-        cleaned_data = {
-            'subject_visit': self.subject_visit,
-            'diagnosis_date_estimate': YES,
-            'diagnosis_date_estimation': 'blah',
-            'on_medication': YES,
-            'treatment_type': 'blah',
-            'treatment_name': None,
-            'medical_condition': 'blah'
-        }
-        form_validator = MedicalConditionsFormValidator(
-            cleaned_data=cleaned_data)
-        self.assertRaises(ValidationError, form_validator.clean)
-        self.assertIn('treatment_name', form_validator._errors)
-
     def test_medical_condition_other_invalid(self):
         cleaned_data = {
             'subject_visit': self.subject_visit,
@@ -85,7 +70,6 @@ class TestMedicalConditionsForm(TestCase):
             'diagnosis_date_estimation': 'blah',
             'on_medication': YES,
             'treatment_type': 'blah',
-            'treatment_name': 'blah',
             'medical_condition': OTHER,
             'medical_condition_other': None
         }
@@ -101,7 +85,6 @@ class TestMedicalConditionsForm(TestCase):
             'diagnosis_date_estimation': 'blah',
             'on_medication': YES,
             'treatment_type': 'blah',
-            'treatment_name': 'blah',
             'medical_condition': OTHER,
             'medical_condition_other': 'blah'
         }
