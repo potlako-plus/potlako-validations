@@ -22,7 +22,7 @@ class TransportFormValidator(CRFFormValidator, FormValidator):
 
         self.not_applicable_if(
             NO,
-            field='criteria_met',
+            field='is_criteria_met',
             field_applicable='transport_type')
 
         self.m2m_required_if(
