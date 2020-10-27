@@ -1,6 +1,6 @@
 from django.apps import apps as django_apps
 from django.core.exceptions import ValidationError
-from edc_constants.constants import NO, OTHER, YES
+from edc_constants.constants import NO, OTHER, YES, POS
 from edc_form_validators import FormValidator
 
 from .crf_form_validator import CRFFormValidator
@@ -90,6 +90,16 @@ class PatientCallInitialFormValidator(CRFFormValidator, FormValidator):
             YES,
             field='hiv_test_date_estimated',
             field_required='hiv_test_date_estimation',)
+        
+        self.required_if(
+            POS,
+            field='hiv_status',
+            field_required='cd4_count',)
+        
+        self.required_if(
+            POS,
+            field='hiv_status',
+            field_required='vl_results',)
         
         self.validate_next_appointment_date(
             next_ap_date=self.cleaned_data.get('next_appointment_date'))
