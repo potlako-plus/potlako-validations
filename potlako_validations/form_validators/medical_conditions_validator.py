@@ -21,5 +21,8 @@ class MedicalConditionsFormValidator(FormValidator):
 
         self.validate_other_specify(
             'medical_condition')
+        
+        self.validate_other_specify(
+            'treatment_type')
 
         super().clean()
