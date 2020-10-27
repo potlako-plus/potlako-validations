@@ -19,11 +19,6 @@ class MedicalConditionsFormValidator(FormValidator):
             field='on_medication',
             field_required='treatment_type',)
 
-        self.required_if(
-            YES,
-            field='on_medication',
-            field_required='treatment_name',)
-
         self.validate_other_specify(
             'medical_condition')
 
