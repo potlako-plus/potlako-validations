@@ -9,10 +9,10 @@ from .crf_form_validator import CRFFormValidator
 class PatientCallInitialFormValidator(CRFFormValidator, FormValidator):
 
     def clean(self):
-        
+
         self.subject_identifier = self.cleaned_data.get(
             'subject_visit').appointment.subject_identifier
-            
+
         self.required_if(
             YES,
             field='work_status',
@@ -51,7 +51,7 @@ class PatientCallInitialFormValidator(CRFFormValidator, FormValidator):
             YES,
             field='potlako_sms_received',
             m2m_field='sms_platform')
-        
+
         self.m2m_other_specify(
             OTHER,
             m2m_field='source_of_info',
@@ -80,19 +80,45 @@ class PatientCallInitialFormValidator(CRFFormValidator, FormValidator):
             YES,
             field='hiv_test_date_estimated',
             field_required='hiv_test_date_estimation',)
-        
+
+        required = ['cd4_count', 'cd4_count_date', 'cd4_count_date_estimated']
+
+        for field_required in required:
+            self.required_if(
+                YES,
+                field='cd4_count_known',
+                field_required=field_required)
+
         self.required_if(
-            POS,
-            field='hiv_status',
-            field_required='cd4_count',)
-        
+            YES,
+            field='cd4_count_date_estimated',
+            field_required='cd4_count_date_estimation')
+
         self.required_if(
-            POS,
-            field='hiv_status',
-            field_required='vl_results',)
-        
+            NO,
+            field='cd4_count_known',
+            field_required='reason_cd4_unknown')
+
+        required = ['vl_results', 'vl_results_date', 'vl_results_date_estimated']
+
+        for field_required in required:
+            self.required_if(
+                YES,
+                field='vl_results_known',
+                field_required=field_required)
+
+        self.required_if(
+            YES,
+            field='vl_results_date_estimated',
+            field_required='vl_results_date_estimation')
+
+        self.required_if(
+            NO,
+            field='vl_results_known',
+            field_required='reason_vl_unknown')
+
         self.validate_next_appointment_date(
             next_ap_date=self.cleaned_data.get('next_appointment_date'))
-        
+
         super().clean()
 
