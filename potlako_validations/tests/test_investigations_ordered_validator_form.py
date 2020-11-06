@@ -2,7 +2,7 @@ from dateutil.relativedelta import relativedelta
 from django.core.exceptions import ValidationError
 from django.test import TestCase, tag
 from edc_base.utils import get_utcnow
-from edc_constants.constants import NO, OTHER, YES
+from edc_constants.constants import OTHER, YES
 
 from ..form_validators import InvestigationsOrderedFormValidator
 from .models import SubjectConsent, SubjectVisit, Appointment
