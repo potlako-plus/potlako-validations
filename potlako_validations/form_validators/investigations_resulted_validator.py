@@ -15,6 +15,16 @@ class InvestigationsResultedFormValidator(CRFFormValidator, FormValidator):
             m2m_field='tests_resulted_type',
             field_other='tests_resulted_type_other')
         
+        self.m2m_other_specify(
+            'pathology',
+            m2m_field='tests_resulted_type',
+            field_other='pathology_tests')
+        
+        self.m2m_other_specify(
+            'imaging',
+            m2m_field='tests_resulted_type',
+            field_other='imaging_tests')
+        
         pathology_tests = [
             'pathology_specimen_date', 'pathology_nhl_date',
              'pathology_result_date', 'pathology_received_date',
