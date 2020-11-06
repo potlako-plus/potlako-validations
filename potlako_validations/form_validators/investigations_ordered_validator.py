@@ -4,71 +4,75 @@ from .crf_form_validator import CRFFormValidator
 
 
 class InvestigationsOrderedFormValidator(CRFFormValidator, FormValidator):
-
+    
     def clean(self):
 
         self.subject_identifier = self.cleaned_data.get(
             'subject_visit').appointment.subject_identifier
 
-        self.m2m_required_if(
+        self.m2m_other_specify(
             'pathology',
-            field='tests_ordered_type',
-            m2m_field='pathology_test')
-
-        self.required_if(
+            m2m_field='tests_ordered_type',
+            field_other='pathology_test')
+        
+        self.m2m_other_specify(
             'imaging',
-            field='tests_ordered_type',
-            field_required='imaging_test_status')
+            m2m_field='tests_ordered_type',
+            field_other='imaging_test_type')
 
-        self.m2m_required_if(
+        self.m2m_other_specify(
             'imaging',
-            field='tests_ordered_type',
-            m2m_field='imaging_test_type')
+            m2m_field='tests_ordered_type',
+            field_other='imaging_test_status')
+        
+        self.required_if_not_none(
+            field='ordered_date',
+            field_required='ordered_date_estimated')
 
         self.required_if(
             YES,
             field='ordered_date_estimated',
             field_required='ordered_date_estimation')
 
-        self.required_if(
+        self.m2m_other_specify(
+            OTHER,
+            m2m_field='tests_ordered_type',
+            field_other='tests_ordered_type_other')
+        
+        self.m2m_other_specify(
             'FNA',
-            field='pathology_test',
-            field_required='fna_location',)
+            m2m_field='pathology_test',
+            field_other='fna_location')
+        
+        self.m2m_other_specify(
+            'biopsy',
+            m2m_field='pathology_test',
+            field_other='biopsy_specify')
+        
+        self.m2m_other_specify(
+            'xray',
+            m2m_field='imaging_test_type',
+            field_other='xray_tests')
+        
+        self.m2m_other_specify(
+            'ultrasound',
+            m2m_field='imaging_test_type',
+            field_other='ultrasound_tests')
+        
+        self.m2m_other_specify(
+            'CT',
+            m2m_field='imaging_test_type',
+            field_other='ct_tests')
+        
+        self.m2m_other_specify(
+            'MRI',
+            m2m_field='imaging_test_type',
+            field_other='mri_tests')
 
         self.m2m_other_specify(
             OTHER,
             m2m_field='pathology_test',
             field_other='pathology_test_other')
-
-        self.required_if(
-            'pathology',
-            field='tests_ordered_type',
-            field_required='pathology_specimen_date',)
-
-        self.required_if(
-            YES,
-            field='tests_ordered_type',
-            field_required='pathology_tests_ordered')
-
-        self.m2m_other_specify(
-            OTHER,
-            m2m_field='tests_ordered_type',
-            field_other='tests_ordered_type_other')
-
-        self.required_if(
-            'ultrasound_other',
-            field='imaging_test_type',
-            field_required='ultrasound_tests',)
-
-        self.required_if(
-            'CT',
-            field='imaging_test_type',
-            field_required='ct_tests',)
-
-        self.required_if(
-            'MRI',
-            field='imaging_test_type',
-            field_required='mri_tests',)
 
         self.m2m_other_specify(
             OTHER,
