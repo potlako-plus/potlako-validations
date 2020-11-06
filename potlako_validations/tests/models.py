@@ -111,3 +111,19 @@ class SubjectLocator(BaseUuidModel):
 
     may_visit_home = models.CharField(
         max_length=3)
+
+class PathologyTestType(ListModelMixin, BaseUuidModel):
+    
+    name = models.CharField(
+        max_length=50)
+    
+    short_name = models.CharField(
+        max_length=50)
+    
+class M2MModel(BaseUuidModel):
+    
+    name = models.CharField(
+        max_length=50)
+    
+    short_name = models.CharField(
+        max_length=50)

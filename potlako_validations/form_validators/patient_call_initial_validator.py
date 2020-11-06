@@ -28,16 +28,6 @@ class PatientCallInitialFormValidator(CRFFormValidator, FormValidator):
             field='work_status',
             field_required='unemployed_reason',)
 
-        self.required_if(
-            YES,
-            field='patient_symptoms_date_estimated',
-            field_required='patient_symptoms_date_estimation',)
-
-        self.not_required_if(
-            0,
-            field='symptoms_duration_report',
-            field_required='symptoms_duration',)
-
         self.not_required_if(
             NO,
             field='other_facility',
