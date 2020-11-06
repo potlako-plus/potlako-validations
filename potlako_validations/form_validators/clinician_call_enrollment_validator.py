@@ -170,6 +170,13 @@ class ClinicianCallEnrollmentFormValidator(FormValidator):
                        ' secondary'}
             self._errors.update(message)
             raise ValidationError(message)
+        
+        if self.cleaned_data['referral_date']:
+            if self.cleaned_data['reg_date'] <= self.cleaned_data['referral_date']:
+                message = {'referral_date':
+                           'Next appointment date cannot be before registration date.'}
+                self._errors.update(message)
+                raise ValidationError(message)
 
         self.required_if(
             YES,
