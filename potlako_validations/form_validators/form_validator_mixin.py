@@ -21,16 +21,6 @@ class FormValidatorMixin:
     def subject_screening_cls(self):
         return django_apps.get_model(self.subject_screening_model)
 
-    def validate_against_consent_datetime(self, report_datetime, id=None):
-        """Returns an instance of the current subject consent or
-        raises an exception if not found."""
-
-        consent = self.validate_against_consent(id=id)
-
-        if report_datetime and report_datetime < consent.consent_datetime:
-            raise forms.ValidationError(
-                "Report datetime cannot be before consent datetime")
-
     def validate_against_consent(self, id=None):
         """Returns an instance of the current subject consent version form or
         raises an exception if not found."""
