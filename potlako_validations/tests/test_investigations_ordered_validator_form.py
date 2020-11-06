@@ -57,47 +57,6 @@ class TestInvestigationsOrderedForm(TestCase):
         except ValidationError as e:
             self.fail(f'ValidationError unexpectedly raised. Got{e}')
     
-    def test_imaging_tests_ordered_status_invalid(self):
-        PathologyTestType.objects.create(name='blah',
-                                         short_name='blah')
-        PathologyTestType.objects.create(name='imaging',
-                                         short_name='imaging')
-        M2MModel.objects.create(name='blah',
-                                     short_name='blah')
-        cleaned_data = {
-            'subject_visit': self.subject_visit,
-            'tests_ordered_type': PathologyTestType.objects.all(),
-            'imaging_test_status': None,
-            'imaging_test_type': M2MModel.objects.all(),
-        }
-        form_validator = InvestigationsOrderedFormValidator(
-            cleaned_data=cleaned_data)
-        self.assertRaises(ValidationError, form_validator.clean)
-        self.assertIn('imaging_test_status', form_validator._errors)
-    
-    
-        
-    def test_imaging_tests_ordered_status_valid(self):
-        PathologyTestType.objects.create(name='blah',
-                                         short_name='blah')
-        PathologyTestType.objects.create(name='imaging',
-                                         short_name='imaging')
-        M2MModel.objects.create(name='blah',
-                                     short_name='blah')
-        cleaned_data = {
-            'subject_visit': self.subject_visit,
-            'tests_ordered_type': PathologyTestType.objects.all(),
-            'imaging_test_status': 'blah',
-            'imaging_test_type': M2MModel.objects.all(),
-        }
-        form_validator = InvestigationsOrderedFormValidator(
-            cleaned_data=cleaned_data)
-        try:
-            form_validator.validate()
-        except ValidationError as e:
-            self.fail(f'ValidationError unexpectedly raised. Got{e}')
-        
-    
     def test_imaging_tests_ordered_type_invalid(self):
         PathologyTestType.objects.create(name='blah',
                                          short_name='blah')
@@ -106,7 +65,6 @@ class TestInvestigationsOrderedForm(TestCase):
         cleaned_data = {
             'subject_visit': self.subject_visit,
             'tests_ordered_type': PathologyTestType.objects.all(),
-            'imaging_test_status': 'blah',
             'imaging_test_type': None,
         }
         form_validator = InvestigationsOrderedFormValidator(
@@ -124,7 +82,6 @@ class TestInvestigationsOrderedForm(TestCase):
         cleaned_data = {
             'subject_visit': self.subject_visit,
             'tests_ordered_type': PathologyTestType.objects.all(),
-            'imaging_test_status': 'blah',
             'imaging_test_type': M2MModel.objects.all(),
         }
         form_validator = InvestigationsOrderedFormValidator(
@@ -320,7 +277,6 @@ class TestInvestigationsOrderedForm(TestCase):
             'subject_visit': self.subject_visit,
             'tests_ordered_type': PathologyTestType.objects.all(),
             'imaging_test_type':  M2MModel.objects.all(),
-            'imaging_test_status': 'blah',
         }
         form_validator = InvestigationsOrderedFormValidator(
             cleaned_data=cleaned_data)
@@ -337,7 +293,6 @@ class TestInvestigationsOrderedForm(TestCase):
             'subject_visit': self.subject_visit,
             'tests_ordered_type': PathologyTestType.objects.all(),
             'imaging_test_type':  M2MModel.objects.all(),
-            'imaging_test_status': 'blah',
             'xray_tests': 'arm'
         }
         form_validator = InvestigationsOrderedFormValidator(
@@ -357,7 +312,6 @@ class TestInvestigationsOrderedForm(TestCase):
             'subject_visit': self.subject_visit,
             'tests_ordered_type': PathologyTestType.objects.all(),
             'imaging_test_type':  M2MModel.objects.all(),
-            'imaging_test_status': 'blah',
         }
         form_validator = InvestigationsOrderedFormValidator(
             cleaned_data=cleaned_data)
@@ -374,7 +328,6 @@ class TestInvestigationsOrderedForm(TestCase):
             'subject_visit': self.subject_visit,
             'tests_ordered_type': PathologyTestType.objects.all(),
             'imaging_test_type':  M2MModel.objects.all(),
-            'imaging_test_status': 'blah',
             'ultrasound_tests': 'arm'
         }
         form_validator = InvestigationsOrderedFormValidator(
@@ -394,7 +347,6 @@ class TestInvestigationsOrderedForm(TestCase):
             'subject_visit': self.subject_visit,
             'tests_ordered_type': PathologyTestType.objects.all(),
             'imaging_test_type':  M2MModel.objects.all(),
-            'imaging_test_status': 'blah',
         }
         form_validator = InvestigationsOrderedFormValidator(
             cleaned_data=cleaned_data)
@@ -411,7 +363,6 @@ class TestInvestigationsOrderedForm(TestCase):
             'subject_visit': self.subject_visit,
             'tests_ordered_type': PathologyTestType.objects.all(),
             'imaging_test_type':  M2MModel.objects.all(),
-            'imaging_test_status': 'blah',
             'ct_tests': 'arm'
         }
         form_validator = InvestigationsOrderedFormValidator(
@@ -431,7 +382,6 @@ class TestInvestigationsOrderedForm(TestCase):
             'subject_visit': self.subject_visit,
             'tests_ordered_type': PathologyTestType.objects.all(),
             'imaging_test_type':  M2MModel.objects.all(),
-            'imaging_test_status': 'blah',
         }
         form_validator = InvestigationsOrderedFormValidator(
             cleaned_data=cleaned_data)
@@ -448,7 +398,6 @@ class TestInvestigationsOrderedForm(TestCase):
             'subject_visit': self.subject_visit,
             'tests_ordered_type': PathologyTestType.objects.all(),
             'imaging_test_type':  M2MModel.objects.all(),
-            'imaging_test_status': 'blah',
             'mri_tests': 'arm'
         }
         form_validator = InvestigationsOrderedFormValidator(

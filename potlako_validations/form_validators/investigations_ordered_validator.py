@@ -20,11 +20,6 @@ class InvestigationsOrderedFormValidator(CRFFormValidator, FormValidator):
             m2m_field='tests_ordered_type',
             field_other='imaging_test_type')
 
-        self.m2m_other_specify(
-            'imaging',
-            m2m_field='tests_ordered_type',
-            field_other='imaging_test_status')
-        
         self.required_if_not_none(
             field='ordered_date',
             field_required='ordered_date_estimated')

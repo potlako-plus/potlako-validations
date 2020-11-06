@@ -25,16 +25,16 @@ class InvestigationsResultedFormValidator(CRFFormValidator, FormValidator):
             m2m_field='tests_resulted_type',
             field_other='imaging_tests')
         
-        pathology_tests = [
+        pathology_tests_fields = [
             'pathology_specimen_date', 'pathology_nhl_date',
              'pathology_result_date', 'pathology_received_date',
              'pathology_communicated_date']
         
-        for test in pathology_tests:
+        for field in pathology_tests_fields:
             self.m2m_other_specify(
                 'pathology',
                 m2m_field='tests_resulted_type',
-                field_other=test)
+                field_other=field)
         
         self.m2m_other_specify(
                 'imaging',
