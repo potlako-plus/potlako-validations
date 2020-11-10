@@ -17,11 +17,12 @@ class MedicalConditionsFormValidator(FormValidator):
         self.required_if(
             YES,
             field='on_medication',
-            field_required='treatment_type',)
+            field_required='treatment_type',
+            inverse=False)
 
         self.validate_other_specify(
             'medical_condition')
-        
+
         self.validate_other_specify(
             'treatment_type')
 
