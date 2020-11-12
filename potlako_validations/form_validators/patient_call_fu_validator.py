@@ -27,7 +27,7 @@ class PatientCallFuFormValidator(CRFFormValidator, FormValidator):
                     NO,
                     field='next_visit_delayed',
                     field_required=field,)
-        
+
         self.validate_sms_outcome()
 
         fields = {'new_complaints': 'new_complaints_description',
@@ -45,7 +45,7 @@ class PatientCallFuFormValidator(CRFFormValidator, FormValidator):
                 YES,
                 field='interval_visit',
                 field_required=field)
-            
+
         self.required_if_not_none(
                 field='last_visit_date',
                 field_required='last_visit_date_estimated')
@@ -69,11 +69,6 @@ class PatientCallFuFormValidator(CRFFormValidator, FormValidator):
                 YES,
                 field=field,
                 field_required=required_field)
-            
-        self.required_if(
-                YES,
-                field='sms_received',
-                field_required='sms_outcome')
 
         self.validate_other_specify(
             'next_ap_facility',
@@ -92,24 +87,36 @@ class PatientCallFuFormValidator(CRFFormValidator, FormValidator):
             next_ap_date=self.cleaned_data.get('next_appointment_date'))
 
         super().clean()
-        
+
     def validate_sms_outcome(self):
         onschedule_cls = django_apps.get_model('potlako_subject.onschedule')
         subject_identifier = self.cleaned_data.get('subject_visit').subject_identifier
-        
+
         try:
             onschedule_cls.objects.get(subject_identifier=subject_identifier,
                                        community_arm='Intervention')
         except onschedule_cls.DoesNotExist:
-            if self.cleaned_data.get('sms_outcome') != NOT_APPLICABLE:
-                message = {
-                    'sms_outcome': 'This field is not applicable.'}
-                self._errors.update(message)
-                raise ValidationError(message)
+            fields = ['sms_received', 'sms_outcome']
+            for field in fields:
+                if self.cleaned_data.get(field) != NOT_APPLICABLE:
+                    message = {
+                        field: 'This field is not applicable.'}
+                    self._errors.update(message)
+                    raise ValidationError(message)
         else:
-            if self.cleaned_data.get('sms_outcome') == NOT_APPLICABLE:
+            if self.cleaned_data.get('sms_received') == NOT_APPLICABLE:
                 message = {
-                    'sms_outcome': 'This field is applicable.'}
+                    'sms_received': 'This field is applicable.'}
                 self._errors.update(message)
                 raise ValidationError(message)
-                
+
+            self.required_if(
+                YES,
+                field='sms_received',
+                field_required='sms_outcome',
+                inverse=False)
+
+            self.not_applicable_if(
+                NO,
+                field='sms_received',
+                field_applicable='sms_outcome')
