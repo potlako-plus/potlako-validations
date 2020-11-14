@@ -54,13 +54,13 @@ class SubjectConsentFormValidator(FormValidator):
         if gender == MALE and identity_key != '1':
             message = {'national_identity': 'The national identity number '
                        f'does not match the pattern expected. Expected the '
-                       f'fourth digit as \'1\' for male, got \'{identity_key}\''}
+                       f'fifth digit as \'1\' for male, got \'{identity_key}\''}
             self._errors.update(message)
             raise ValidationError(message)
         elif gender == FEMALE and identity_key != '2':
             message = {'identity': 'The national identity number '
                        f'does not match the pattern expected. Expected the '
-                       f'fourth digit as \'2\' for female, got \'{identity_key}\''}
+                       f'fifth digit as \'2\' for female, got \'{identity_key}\''}
             self._errors.update(message)
             raise ValidationError(message)
 
