@@ -1,0 +1,105 @@
+from edc_constants.constants import YES
+
+from edc_form_validators import FormValidator
+from django.core.exceptions import ValidationError
+
+
+class CancerDxAndTxEndpointFormValidator(FormValidator):
+
+    def clean(self):
+
+        req_fields = ['diagnosis_date', 'diagnosis_date_estimated']
+        for req_field in req_fields:
+            self.required_if(
+                'complete',
+                field='cancer_evaluation',
+                field_required=req_field)
+
+        self.required_if(
+            YES,
+            field='diagnosis_date_estimated',
+            field_required='diagnosis_date_estimation')
+
+        cancer_responses = ['confirmed_cancer', 'probable_cancer']
+        self.required_if(
+            *cancer_responses,
+            field='clinical_impression',
+            field_required='final_cancer_diagnosis')
+
+        self.validate_other_specify(field='final_cancer_diagnosis')
+
+        non_cancer_responses = ['confirmed_not_cancer', 'alternative_diagnosis']
+        self.required_if(
+            *non_cancer_responses,
+            field='clinical_impression',
+            field_required='non_cancer_diagnosis')
+
+        self.validate_other_specify(field='non_cancer_diagnosis')
+
+        required_fields = ['cancer_diagnosis', 'cancer_histology_code',
+                           'cancer_diagnosis_stage', 'cancer_therapy']
+        for required_field in required_fields:
+            self.required_if(
+                *cancer_responses,
+                field='clinical_impression',
+                field_required=required_field)
+
+        cancer_stages = ['tumor_stage', 'nodal_stage',
+                         'distant_metastasis_stage', ]
+        clinical_impression = self.cleaned_data.get('clinical_impression')
+
+        for cancer_stage in cancer_stages:
+            if (clinical_impression in cancer_responses
+                    and self.cleaned_data.get(cancer_stage) is None):
+                msg = {cancer_stage: 'This field is required.'}
+                self._errors.update(msg)
+                raise ValidationError(msg)
+            elif(clinical_impression not in cancer_responses
+                 and self.cleaned_data.get(cancer_stage) is not None):
+                msg = {cancer_stage: 'This field is not required.'}
+                self._errors.update(msg)
+                raise ValidationError(msg)
+
+        fields_required = ['treatment_intent', 'therapeutic_surgery',
+                           'chemotherapy', 'radiation']
+        for field_required in fields_required:
+            self.required_if(
+                YES,
+                field='cancer_therapy',
+                field_required=field_required)
+
+        req_fields = ['surgery_date', 'surgery_date_estimated']
+        for req_field in req_fields:
+            self.required_if(
+                YES,
+                field='therapeutic_surgery',
+                field_required=req_field)
+
+        self.required_if(
+            YES,
+            field='surgery_date_estimated',
+            field_required='surgery_date_estimation')
+
+        req_fields = ['chemotherapy_date', 'chemotherapy_date_estimated']
+        for req_field in req_fields:
+            self.required_if(
+                YES,
+                field='chemotherapy',
+                field_required=req_field)
+
+        self.required_if(
+            YES,
+            field='chemotherapy_date_estimated',
+            field_required='chemotherapy_date_estimation')
+
+        req_fields = ['radiation_date', 'radiation_date_estimated']
+        for req_field in req_fields:
+            self.required_if(
+                YES,
+                field='radiation',
+                field_required=req_field)
+
+        self.required_if(
+            YES,
+            field='radiation_date_estimated',
+            field_required='radiation_date_estimation')
