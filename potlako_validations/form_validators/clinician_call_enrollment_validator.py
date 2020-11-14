@@ -1,5 +1,11 @@
+import arrow
+import pytz
+from datetime import datetime
+
 from django.apps import apps as django_apps
 from django.core.exceptions import ValidationError
+from django.utils import timezone
+from edc_base.utils import get_utcnow
 from edc_constants.constants import NOT_APPLICABLE
 from edc_constants.constants import YES, NO, OTHER, MALE, FEMALE
 from edc_form_validators import FormValidator
@@ -88,6 +94,8 @@ class ClinicianCallEnrollmentFormValidator(FormValidator):
             field_required='suspected_cancer_unsure'
         )
 
+        self.early_syptoms_date_not_today()
+
         self.validate_other_specify('suspected_cancer',)
 
         self.clean_names_start_with_caps()
@@ -170,13 +178,16 @@ class ClinicianCallEnrollmentFormValidator(FormValidator):
                        ' secondary'}
             self._errors.update(message)
             raise ValidationError(message)
-        
-        if self.cleaned_data['referral_date']:
-            if self.cleaned_data['reg_date'] > self.cleaned_data['referral_date']:
+
+        referral_date = self.cleaned_data['referral_date']
+        if referral_date:
+            if self.cleaned_data['reg_date'] > referral_date:
                 message = {'referral_date':
                            'Next appointment date cannot be before registration date.'}
                 self._errors.update(message)
                 raise ValidationError(message)
+
+        self.validate_referral_date(referral_date)
 
         self.required_if(
             YES,
@@ -217,3 +228,37 @@ class ClinicianCallEnrollmentFormValidator(FormValidator):
                     'This field is not applicable.'}
                 self._errors.update(message)
                 raise ValidationError(message)
+
+    def early_syptoms_date_not_today(self):
+        early_symptoms_date = self.cleaned_data.get('early_symptoms_date')
+        if early_symptoms_date and early_symptoms_date == get_utcnow().date():
+            msg = {
+                'early_symptoms_date':
+                'Date of earliest onset symptom(s) cannot be today.'}
+            self._errors.update(msg)
+            raise ValidationError(msg)
+
+    def validate_referral_date(self, next_ap_date=None,):
+        if next_ap_date:
+            my_time = datetime.min.time()
+            suggested_datetime = datetime.combine(next_ap_date, my_time)
+            suggested_datetime = timezone.make_aware(
+                suggested_datetime, timezone=pytz.utc)
+
+            facility = self.get_facility()
+            available_datetime = facility.available_rdate(
+                suggested_datetime=suggested_datetime,)
+
+            # Change suggested datetime to arrow before compare
+            suggested_rdate = arrow.Arrow.fromdatetime(suggested_datetime)
+            if suggested_rdate != available_datetime:
+                msg = {'referral_date':
+                       f'{next_ap_date} falls on a holiday/weekend, please '
+                       'specify a different date. Next available date is '
+                       f'{available_datetime.format("dddd")}, '
+                       f'{available_datetime.format("DD-MM-YYYY")}'}
+                self._errors.update(msg)
+                raise ValidationError(msg)
+
+    def get_facility(self):
+        return self.facility_app_config.get_facility('5-day clinic')
