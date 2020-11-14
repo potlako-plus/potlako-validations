@@ -4,7 +4,7 @@ from .crf_form_validator import CRFFormValidator
 
 
 class InvestigationsOrderedFormValidator(CRFFormValidator, FormValidator):
-    
+
     def clean(self):
 
         self.subject_identifier = self.cleaned_data.get(
@@ -14,7 +14,7 @@ class InvestigationsOrderedFormValidator(CRFFormValidator, FormValidator):
             'pathology',
             m2m_field='tests_ordered_type',
             field_other='pathology_test')
-        
+
         self.m2m_other_specify(
             'imaging',
             m2m_field='tests_ordered_type',
@@ -33,32 +33,32 @@ class InvestigationsOrderedFormValidator(CRFFormValidator, FormValidator):
             OTHER,
             m2m_field='tests_ordered_type',
             field_other='tests_ordered_type_other')
-        
+
         self.m2m_other_specify(
             'FNA',
             m2m_field='pathology_test',
             field_other='fna_location')
-        
+
         self.m2m_other_specify(
             'biopsy',
             m2m_field='pathology_test',
             field_other='biopsy_specify')
-        
+
         self.m2m_other_specify(
             'xray',
             m2m_field='imaging_test_type',
             field_other='xray_tests')
-        
+
         self.m2m_other_specify(
             'ultrasound',
             m2m_field='imaging_test_type',
             field_other='ultrasound_tests')
-        
+
         self.m2m_other_specify(
             'CT',
             m2m_field='imaging_test_type',
             field_other='ct_tests')
-        
+
         self.m2m_other_specify(
             'MRI',
             m2m_field='imaging_test_type',
@@ -72,7 +72,7 @@ class InvestigationsOrderedFormValidator(CRFFormValidator, FormValidator):
         self.m2m_other_specify(
             OTHER,
             m2m_field='imaging_test_type',
-            field_other='imaging_test_type_other')
+            field_other='imaging_tests_type_other')
 
         self.validate_other_specify(
             'facility_ordered')
