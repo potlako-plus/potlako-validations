@@ -9,6 +9,7 @@ from .investigations_resulted_validator import InvestigationsResultedFormValidat
 from .medical_conditions_validator import MedicalConditionsFormValidator
 from .missed_visit_validator import MissedVisitFormValidator
 from .next_of_kin_validator import NextOfKinFormValidator
+from .patient_availability_log_entry_validator import PatientAvailabilityLogEntryFormValidator
 from .patient_call_fu_validator import PatientCallFuFormValidator
 from .patient_call_initial_validator import PatientCallInitialFormValidator
 from .sms_validator import SmsFormValidator
