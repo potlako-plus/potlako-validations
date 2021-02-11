@@ -41,7 +41,8 @@ class SubjectConsentFormValidator(FormValidator):
                     clinician_enrollment.national_identity,
                     field='identity')
 
-        self.validate_dob(self.screening_identifier)
+        self.validate_dob(
+            self.screening_identifier, clinician_enrollment.report_datetime.date())
         self.validate_identity_gender()
         self.validate_verbal_script_field()
         self.validate_citizen_field()
@@ -64,7 +65,7 @@ class SubjectConsentFormValidator(FormValidator):
             self._errors.update(message)
             raise ValidationError(message)
 
-    def validate_dob(self, screening_identifier):
+    def validate_dob(self, screening_identifier, enrollment_report_dt):
         try:
             subject_screening = self.subject_screening_cls.objects.get(
                 screening_identifier=screening_identifier)
@@ -73,8 +74,9 @@ class SubjectConsentFormValidator(FormValidator):
                                   'form first.')
         else:
             dob = self.cleaned_data.get('dob')
-            age_in_years = age(dob, get_utcnow()).years
+            age_in_years = age(dob, enrollment_report_dt).years
 
+            import pdb; pdb.set_trace()
             if (subject_screening.age_in_years
                     and subject_screening.age_in_years != age_in_years):
                 message = {'dob':
