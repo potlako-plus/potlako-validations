@@ -76,7 +76,6 @@ class SubjectConsentFormValidator(FormValidator):
             dob = self.cleaned_data.get('dob')
             age_in_years = age(dob, enrollment_report_dt).years
 
-            import pdb; pdb.set_trace()
             if (subject_screening.age_in_years
                     and subject_screening.age_in_years != age_in_years):
                 message = {'dob':
