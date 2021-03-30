@@ -24,7 +24,7 @@ class TransportFormValidator(CRFFormValidator, FormValidator):
 
         self.applicable_if(
             YES,
-            field='criteria_met',
+            field='is_criteria_met',
             field_applicable='transport_type')
 
         qs = self.cleaned_data.get('criteria_met')

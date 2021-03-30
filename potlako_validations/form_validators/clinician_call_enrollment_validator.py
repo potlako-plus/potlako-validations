@@ -34,15 +34,6 @@ class ClinicianCallEnrollmentFormValidator(FormValidator):
             other_specify_field='call_clinician_other',
         )
 
-        consented_contact = self.cleaned_data.get('consented_contact')
-
-        if consented_contact == NO:
-            message = {'consented_contact':
-                       'The Participant does not consent to being contacted by'
-                       ' the Potlako+ team. Can not continue with enrollment.'}
-            self._errors.update(message)
-            raise ValidationError(message)
-
         gender = self.cleaned_data.get('gender')
         cancer_type = self.cleaned_data.get('suspected_cancer')
 
@@ -99,6 +90,8 @@ class ClinicianCallEnrollmentFormValidator(FormValidator):
         self.validate_other_specify('suspected_cancer',)
 
         self.clean_names_start_with_caps()
+
+        self.clean_fname()
 
         identity_key = self.cleaned_data.get('national_identity')[4]
         gender = self.cleaned_data.get('gender')
@@ -207,6 +200,17 @@ class ClinicianCallEnrollmentFormValidator(FormValidator):
             message = {'first_name': 'Must start with capital letter.'}
             self._errors.update(message)
             raise ValidationError(message)
+
+    def clean_fname(self):
+
+        first_name = self.cleaned_data.get('first_name')
+
+        if first_name:
+            names = first_name.split(" ")
+            if len(names) > 1:
+                message = {'first_name': 'Please provide only the first name.'}
+                self._errors.update(message)
+                raise ValidationError(message)
 
     def m2m_applicable_if(
             self, *responses, field=None, m2m_field_applicable=None):
