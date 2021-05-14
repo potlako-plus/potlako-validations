@@ -101,7 +101,7 @@ class SubjectConsentFormValidator(FormValidator):
             raise ValidationError(message)
 
     def validate_verbal_script_field(self):
-        verbal_script = self.cleaned_data['verbal_script']
+        verbal_script = self.cleaned_data.get('verbal_script')
 
         if verbal_script == NO:
             message = {'verbal_script':
@@ -111,9 +111,9 @@ class SubjectConsentFormValidator(FormValidator):
             raise ValidationError(message)
 
     def validate_citizen_field(self):
-        verbal_script = self.cleaned_data['citizen']
+        citizen = self.cleaned_data.get('citizen')
 
-        if verbal_script == NO:
+        if citizen == NO:
             message = {'citizen':
                        'Participant is not a citizen of Botswana.'}
             self._errors.update(message)
