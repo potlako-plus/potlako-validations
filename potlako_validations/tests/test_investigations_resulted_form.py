@@ -28,7 +28,8 @@ class TestInvestigationsResultedForm(TestCase):
                                          short_name=OTHER)
         cleaned_data = {
             'subject_visit': self.subject_visit,
-            'diagnosis_results': 'blah',
+            'diagnosis_results': 'non-malignant',
+            'diagnoses_made': None
         }
         form_validator = InvestigationsResultedFormValidator(
             cleaned_data=cleaned_data)
@@ -47,6 +48,18 @@ class TestInvestigationsResultedForm(TestCase):
         self.assertRaises(ValidationError, form_validator.clean)
         self.assertIn('cancer_type', form_validator._errors)
 
+    def test_diagnoses_results_other_invalid(self):
+        PathologyTestType.objects.create(name='pah',
+                                         short_name=OTHER)
+        cleaned_data = {
+            'subject_visit': self.subject_visit,
+            'diagnosis_results': OTHER,
+        }
+        form_validator = InvestigationsResultedFormValidator(
+            cleaned_data=cleaned_data)
+        self.assertRaises(ValidationError, form_validator.clean)
+        self.assertIn('diagnosis_results_other', form_validator._errors)
+
     def test_diagnoses_results_valid(self):
         PathologyTestType.objects.create(name=OTHER,
                                          short_name=OTHER)
@@ -61,3 +74,42 @@ class TestInvestigationsResultedForm(TestCase):
             form_validator.validate()
         except ValidationError as e:
             self.fail(f'ValidationError unexpectedly raised. Got{e}')
+
+    def test_diagnoses_inconclusive_invalid(self):
+        PathologyTestType.objects.create(name='pah',
+                                         short_name=OTHER)
+        cleaned_data = {
+            'subject_visit': self.subject_visit,
+            'diagnosis_results': 'inconclusive',
+            'diagnoses_made': 'blah'
+        }
+        form_validator = InvestigationsResultedFormValidator(
+            cleaned_data=cleaned_data)
+        self.assertRaises(ValidationError, form_validator.clean)
+        self.assertIn('diagnoses_made', form_validator._errors)
+
+    def test_diagnoses_untraceable_invalid(self):
+        PathologyTestType.objects.create(name='pah',
+                                         short_name=OTHER)
+        cleaned_data = {
+            'subject_visit': self.subject_visit,
+            'diagnosis_results': 'untraceable',
+            'diagnoses_made': 'blah'
+        }
+        form_validator = InvestigationsResultedFormValidator(
+            cleaned_data=cleaned_data)
+        self.assertRaises(ValidationError, form_validator.clean)
+        self.assertIn('diagnoses_made', form_validator._errors)
+
+    def test_diagnoses_suggestive_invalid(self):
+        PathologyTestType.objects.create(name='pah',
+                                         short_name=OTHER)
+        cleaned_data = {
+            'subject_visit': self.subject_visit,
+            'diagnosis_results': 'suggestive',
+            'diagnoses_made': 'blah'
+        }
+        form_validator = InvestigationsResultedFormValidator(
+            cleaned_data=cleaned_data)
+        self.assertRaises(ValidationError, form_validator.clean)
+        self.assertIn('diagnoses_made', form_validator._errors)
