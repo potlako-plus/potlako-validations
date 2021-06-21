@@ -44,7 +44,7 @@ class InvestigationsResultedFormValidator(CRFFormValidator, FormValidator):
             field_required='cancer_type')
 
         self.required_if(
-            'non-malignant',
+            'non_malignant',
             field='diagnosis_results',
             field_required='diagnoses_made')
 
