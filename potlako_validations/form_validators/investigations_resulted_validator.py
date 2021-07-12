@@ -10,19 +10,12 @@ class InvestigationsResultedFormValidator(CRFFormValidator, FormValidator):
             'subject_visit').appointment.subject_identifier
 
         self.m2m_other_specify(
-            'pathology',
-            m2m_field='tests_resulted_type',
-            field_other='pathology_tests')
-
-        self.m2m_other_specify(
             'imaging',
             m2m_field='tests_resulted_type',
             field_other='imaging_tests')
 
         pathology_tests_fields = [
-            'pathology_specimen_date', 'pathology_nhl_date',
-            'pathology_result_date', 'pathology_received_date',
-            'pathology_communicated_date']
+            'pathology_result_date', 'pathology_received_date', 'pathology_communicated_date']
 
         for field in pathology_tests_fields:
             self.m2m_other_specify(
