@@ -49,7 +49,7 @@ class CRFFormValidator:
                     'Participant has been taken offstudy. Cannot capture any '
                     'new data.')
         else:
-            self.potlako_visit = self.cleaned_data.get('subject_visit') or None
+            self.subject_visit = self.cleaned_data.get('subject_visit') or None
             if not self.subject_visit or self.subject_visit.require_crfs == NO:
                 raise forms.ValidationError(
                     'Participant is scheduled to be taken offstudy without '
