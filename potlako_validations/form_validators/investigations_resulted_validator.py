@@ -1,3 +1,4 @@
+from edc_constants.constants import OTHER
 from edc_form_validators import FormValidator
 from .crf_form_validator import CRFFormValidator
 
@@ -5,12 +6,16 @@ from .crf_form_validator import CRFFormValidator
 class InvestigationsResultedFormValidator(CRFFormValidator, FormValidator):
 
     def clean(self):
-
         self.subject_identifier = self.cleaned_data.get(
             'subject_visit').appointment.subject_identifier
 
         self.m2m_other_specify(
-            'imaging',
+            OTHER,
+            m2m_field='tests_resulted_type',
+            field_other='other_tests_resulted_type')
+
+        self.m2m_other_specify(
+            'Other',
             m2m_field='tests_resulted_type',
             field_other='imaging_tests')
 
@@ -24,9 +29,9 @@ class InvestigationsResultedFormValidator(CRFFormValidator, FormValidator):
                 field_other=field)
 
         self.m2m_other_specify(
-                'imaging',
-                m2m_field='tests_resulted_type',
-                field_other='imaging_tests_date')
+            'imaging',
+            m2m_field='tests_resulted_type',
+            field_other='imaging_tests_date')
 
         self.validate_other_specify(
             'diagnosis_results')
