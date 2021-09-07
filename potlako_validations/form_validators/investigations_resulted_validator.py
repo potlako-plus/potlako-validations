@@ -12,10 +12,10 @@ class InvestigationsResultedFormValidator(CRFFormValidator, FormValidator):
         self.m2m_other_specify(
             OTHER,
             m2m_field='tests_resulted_type',
-            field_other='other_tests_resulted_type')
+            field_other='tests_resulted_type_other')
 
         self.m2m_other_specify(
-            'Other',
+            'imaging',
             m2m_field='tests_resulted_type',
             field_other='imaging_tests')
 
