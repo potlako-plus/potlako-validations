@@ -16,11 +16,6 @@ class InvestigationsOrderedFormValidator(CRFFormValidator, FormValidator):
             field_other='pathology_test')
 
         self.m2m_other_specify(
-            'pathology',
-            m2m_field='tests_ordered_type',
-            field_other='pathology_specimen_date')
-
-        self.m2m_other_specify(
             'imaging',
             m2m_field='tests_ordered_type',
             field_other='imaging_test_type')
