@@ -1,3 +1,4 @@
+from pickle import FALSE
 from django.apps import apps as django_apps
 from edc_constants.constants import NO, YES, OTHER, NOT_APPLICABLE
 from edc_form_validators import FormValidator
@@ -30,8 +31,7 @@ class PatientCallFuFormValidator(CRFFormValidator, FormValidator):
 
         self.validate_sms_outcome()
 
-        fields = {'new_complaints': 'new_complaints_description',
-                  'appt_change': 'appt_change_reason'}
+        fields = {'appt_change': 'appt_change_reason'}
 
         for field, required_field in fields.items():
             self.required_if(
@@ -46,6 +46,11 @@ class PatientCallFuFormValidator(CRFFormValidator, FormValidator):
                 field='interval_visit',
                 field_required=field)
 
+        self.required_if_true(
+                NO,
+                field='new_complaints',
+                field_required='new_complaints_description', inverse=False)
+        
         self.required_if_not_none(
                 field='last_visit_date',
                 field_required='last_visit_date_estimated')
