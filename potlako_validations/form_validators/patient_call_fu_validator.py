@@ -1,8 +1,9 @@
 from django.apps import apps as django_apps
+from django.core.exceptions import ValidationError
 from edc_constants.constants import NO, YES, OTHER, NOT_APPLICABLE
 from edc_form_validators import FormValidator
+
 from .crf_form_validator import CRFFormValidator
-from django.core.exceptions import ValidationError
 
 
 class PatientCallFuFormValidator(CRFFormValidator, FormValidator):
@@ -30,14 +31,10 @@ class PatientCallFuFormValidator(CRFFormValidator, FormValidator):
 
         self.validate_sms_outcome()
 
-        fields = {'new_complaints': 'new_complaints_description',
-                  'appt_change': 'appt_change_reason'}
-
-        for field, required_field in fields.items():
-            self.required_if(
-                YES,
-                field=field,
-                field_required=required_field)
+        self.required_if(
+            YES,
+            field='appt_change',
+            field_required='appt_change_reason')
 
         for field in ['facility_visited_count', 'last_visit_date',
                       'last_visit_date_estimated', 'last_visit_facility']:
