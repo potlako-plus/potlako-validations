@@ -1,3 +1,4 @@
+from pickle import FALSE
 from django.apps import apps as django_apps
 from django.core.exceptions import ValidationError
 from edc_constants.constants import NO, YES, OTHER, NOT_APPLICABLE
@@ -42,6 +43,11 @@ class PatientCallFuFormValidator(CRFFormValidator, FormValidator):
                 YES,
                 field='interval_visit',
                 field_required=field)
+
+        self.required_if_true(
+                NO,
+                field='new_complaints',
+                field_required='new_complaints_description', inverse=False)
 
         self.required_if_not_none(
                 field='last_visit_date',
