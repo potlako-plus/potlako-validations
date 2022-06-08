@@ -44,11 +44,6 @@ class PatientCallFuFormValidator(CRFFormValidator, FormValidator):
                 field='interval_visit',
                 field_required=field)
 
-        self.required_if_true(
-                NO,
-                field='new_complaints',
-                field_required='new_complaints_description', inverse=False)
-
         self.required_if_not_none(
                 field='last_visit_date',
                 field_required='last_visit_date_estimated')
