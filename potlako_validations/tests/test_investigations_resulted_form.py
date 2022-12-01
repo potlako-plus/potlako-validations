@@ -113,3 +113,28 @@ class TestInvestigationsResultedForm(TestCase):
             cleaned_data=cleaned_data)
         self.assertRaises(ValidationError, form_validator.clean)
         self.assertIn('diagnoses_made', form_validator._errors)
+        
+    @tag('dm')
+    def test_malignant_diagnosis_made_required(self):
+        cleaned_data = {
+            'subject_visit': self.subject_visit,
+            'tests_resulted_type_other': None,
+            'imaging_tests': None,
+            'pathology_received_date': None,
+            'pathology_communicated_date': None,
+            'imaging_tests_date': None,
+            'diagnosis_results': 'inconclusive',
+            'diagnosis_results_other': None,
+            'pathology_result_date': None,
+            'cancer_type': None,
+            'diagnoses_made': None,
+            'results_reviewed': None
+            
+        }
+        
+        form_validator = InvestigationsResultedFormValidator(
+            cleaned_data=cleaned_data)
+        self.assertRaises(ValidationError, form_validator.clean)
+        self.assertIn('diagnoses_made', form_validator._errors)
+        
+    
