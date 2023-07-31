@@ -1,10 +1,15 @@
-from edc_constants.constants import YES
-
-from edc_form_validators import FormValidator
+from django.apps import apps as django_apps
 from django.core.exceptions import ValidationError
+from edc_constants.constants import YES
+from edc_form_validators import FormValidator
 
 
 class CancerDxAndTxEndpointFormValidator(FormValidator):
+    care_seeking_endpoint_model = 'potlako_subject.symptomsandcareseekingendpoint'
+
+    @property
+    def care_seeking_endpoint_cls(self):
+        return django_apps.get_model(self.care_seeking_endpoint_model)
 
     def clean(self):
 
@@ -54,8 +59,8 @@ class CancerDxAndTxEndpointFormValidator(FormValidator):
                 msg = {cancer_stage: 'This field is required.'}
                 self._errors.update(msg)
                 raise ValidationError(msg)
-            elif(clinical_impression not in cancer_responses
-                 and self.cleaned_data.get(cancer_stage) is not None):
+            elif (clinical_impression not in cancer_responses
+                  and self.cleaned_data.get(cancer_stage) is not None):
                 msg = {cancer_stage: 'This field is not required.'}
                 self._errors.update(msg)
                 raise ValidationError(msg)
@@ -103,3 +108,17 @@ class CancerDxAndTxEndpointFormValidator(FormValidator):
             YES,
             field='radiation_date_estimated',
             field_required='radiation_date_estimation')
+
+        self.validate_care_seeking_endpoint_completed()
+
+    def validate_care_seeking_endpoint_completed(self):
+        """Validates that the care seeking endpoint is completed before
+        the cancer diagnosis and treatment endpoint is completed.
+        """
+        try:
+            self.care_seeking_endpoint_cls.objects.get(
+                subject_identifier=self.cleaned_data.get('subject_identifier'))
+        except self.care_seeking_endpoint_cls.DoesNotExist:
+            msg = {'final_deposition': 'Care seeking endpoint must be completed first.'}
+            self._errors.update(msg)
+            raise ValidationError(msg)

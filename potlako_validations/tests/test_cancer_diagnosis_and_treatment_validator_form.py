@@ -4,7 +4,7 @@ from django.test import TestCase
 from edc_base.utils import get_utcnow
 from edc_constants.constants import YES, NO
 
-from ..form_validators import CancerDiagnosisAndTreatmentFormValidator
+from ..form_validators import CancerDxAndTxFormValidator
 from .models import SubjectConsent, SubjectVisit, Appointment
 
 
@@ -31,7 +31,7 @@ class TestCancerDiagnosisAndTreatmentForm(TestCase):
                 'cancer_evaluation': 'complete',
                 'diagnosis_date': None}
 
-        form_validator = CancerDiagnosisAndTreatmentFormValidator(
+        form_validator = CancerDxAndTxFormValidator(
                 cleaned_data=cleaned_data)
         self.assertRaises(ValidationError, form_validator.clean)
         self.assertIn('diagnosis_date', form_validator._errors)
@@ -47,7 +47,7 @@ class TestCancerDiagnosisAndTreatmentForm(TestCase):
             'diagnosis_date': get_utcnow() - relativedelta(days=10),
             'diagnosis_date_estimated': NO}
 
-        form_validator = CancerDiagnosisAndTreatmentFormValidator(
+        form_validator = CancerDxAndTxFormValidator(
             cleaned_data=cleaned_data)
         try:
             form_validator.validate()
@@ -64,7 +64,7 @@ class TestCancerDiagnosisAndTreatmentForm(TestCase):
                 'cancer_evaluation': 'unable_to_complete',
                 'diagnosis_date': get_utcnow() - relativedelta(days=10)}
 
-        form_validator = CancerDiagnosisAndTreatmentFormValidator(
+        form_validator = CancerDxAndTxFormValidator(
                 cleaned_data=cleaned_data)
         self.assertRaises(ValidationError, form_validator.clean)
         self.assertIn('diagnosis_date', form_validator._errors)
@@ -79,7 +79,7 @@ class TestCancerDiagnosisAndTreatmentForm(TestCase):
                 'cancer_evaluation': 'unable_to_complete',
                 'diagnosis_date': None}
 
-        form_validator = CancerDiagnosisAndTreatmentFormValidator(
+        form_validator = CancerDxAndTxFormValidator(
                 cleaned_data=cleaned_data)
         try:
             form_validator.validate()
@@ -98,7 +98,7 @@ class TestCancerDiagnosisAndTreatmentForm(TestCase):
                 'diagnosis_date_estimated': YES,
                 'diagnosis_date_estimation': None}
 
-        form_validator = CancerDiagnosisAndTreatmentFormValidator(
+        form_validator = CancerDxAndTxFormValidator(
                 cleaned_data=cleaned_data)
         self.assertRaises(ValidationError, form_validator.clean)
         self.assertIn('diagnosis_date_estimation', form_validator._errors)
@@ -115,7 +115,7 @@ class TestCancerDiagnosisAndTreatmentForm(TestCase):
                 'diagnosis_date_estimated': YES,
                 'diagnosis_date_estimation': 'day'}
 
-        form_validator = CancerDiagnosisAndTreatmentFormValidator(
+        form_validator = CancerDxAndTxFormValidator(
                 cleaned_data=cleaned_data)
         try:
             form_validator.validate()
@@ -136,7 +136,7 @@ class TestCancerDiagnosisAndTreatmentForm(TestCase):
                 'cancer_treatment': YES,
                 'treatment_description': None}
 
-        form_validator = CancerDiagnosisAndTreatmentFormValidator(
+        form_validator = CancerDxAndTxFormValidator(
                 cleaned_data=cleaned_data)
         self.assertRaises(ValidationError, form_validator.clean)
         self.assertIn('treatment_description', form_validator._errors)
@@ -155,7 +155,7 @@ class TestCancerDiagnosisAndTreatmentForm(TestCase):
                 'cancer_treatment': YES,
                 'treatment_description': 'Some very important description'}
 
-        form_validator = CancerDiagnosisAndTreatmentFormValidator(
+        form_validator = CancerDxAndTxFormValidator(
                 cleaned_data=cleaned_data)
         try:
             form_validator.validate()
@@ -175,7 +175,7 @@ class TestCancerDiagnosisAndTreatmentForm(TestCase):
                 'diagnosis_date_estimation': 'day',
                 'cancer_treatment': NO,
                 'treatment_description': None}
-        form_validator = CancerDiagnosisAndTreatmentFormValidator(
+        form_validator = CancerDxAndTxFormValidator(
             cleaned_data=cleaned_data)
         try:
             form_validator.validate()
