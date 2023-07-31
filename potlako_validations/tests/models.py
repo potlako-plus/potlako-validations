@@ -12,7 +12,6 @@ class ListModel(ListModelMixin, BaseUuidModel):
 
 
 class SubjectConsent(UpdatesOrCreatesRegistrationModelMixin, BaseUuidModel):
-
     subject_identifier = models.CharField(max_length=25)
 
     screening_identifier = models.CharField(max_length=50)
@@ -37,7 +36,6 @@ class SubjectConsent(UpdatesOrCreatesRegistrationModelMixin, BaseUuidModel):
 
 
 class RegisteredSubject(BaseUuidModel):
-
     subject_identifier = models.CharField(max_length=25)
 
     first_name = FirstnameField(null=True)
@@ -48,7 +46,6 @@ class RegisteredSubject(BaseUuidModel):
 
 
 class Appointment(BaseUuidModel):
-
     subject_identifier = models.CharField(max_length=25)
 
     appt_datetime = models.DateTimeField(default=get_utcnow)
@@ -57,7 +54,6 @@ class Appointment(BaseUuidModel):
 
 
 class SubjectVisit(BaseUuidModel):
-
     appointment = models.OneToOneField(Appointment, on_delete=PROTECT)
 
     subject_identifier = models.CharField(max_length=25)
@@ -76,7 +72,6 @@ class SubjectVisit(BaseUuidModel):
 
 
 class SubjectScreening(BaseUuidModel):
-
     subject_identifier = models.CharField(
         max_length=50)
 
@@ -95,7 +90,6 @@ class SubjectScreening(BaseUuidModel):
 
 
 class SubjectLocator(BaseUuidModel):
-
     subject_identifier = models.CharField(
         max_length=50)
 
@@ -112,18 +106,23 @@ class SubjectLocator(BaseUuidModel):
     may_visit_home = models.CharField(
         max_length=3)
 
+
 class PathologyTestType(ListModelMixin, BaseUuidModel):
-    
     name = models.CharField(
         max_length=50)
-    
+
     short_name = models.CharField(
         max_length=50)
-    
+
+
 class M2MModel(BaseUuidModel):
-    
     name = models.CharField(
         max_length=50)
-    
+
     short_name = models.CharField(
+        max_length=50)
+
+
+class SymptomsAndCareSeekingEndpoint(BaseUuidModel):
+    subject_identifier = models.CharField(
         max_length=50)
