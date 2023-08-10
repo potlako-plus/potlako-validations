@@ -126,3 +126,11 @@ class M2MModel(BaseUuidModel):
 class SymptomsAndCareSeekingEndpoint(BaseUuidModel):
     subject_identifier = models.CharField(
         max_length=50)
+<<<<<<< Updated upstream
+=======
+
+
+class CancerDxAndTxEndpoint(BaseUuidModel):
+    subject_identifier = models.CharField(
+        max_length=50)
+>>>>>>> Stashed changes

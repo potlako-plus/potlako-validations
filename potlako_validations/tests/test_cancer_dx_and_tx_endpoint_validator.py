@@ -3,7 +3,12 @@ from django.test import tag, TestCase
 from model_mommy import mommy
 
 from potlako_validations.form_validators import CancerDxAndTxEndpointFormValidator
+<<<<<<< Updated upstream
 from potlako_validations.tests.models import SymptomsAndCareSeekingEndpoint
+=======
+from potlako_validations.tests.models import CancerDxAndTxEndpoint, \
+    SymptomsAndCareSeekingEndpoint
+>>>>>>> Stashed changes
 
 
 @tag('cancer_dx_and_tx_endpoint')
@@ -15,7 +20,11 @@ class TestCancerDxAndTxEndpointValidator(TestCase):
             care_seeking_endpoint_model
 
     def test_validate_care_seeking_endpoint_completed_not_raised(self):
+<<<<<<< Updated upstream
         care_seeking_endpoint = mommy.make(SymptomsAndCareSeekingEndpoint)
+=======
+        care_seeking_endpoint = mommy.make(CancerDxAndTxEndpoint)
+>>>>>>> Stashed changes
         cleaned_data = {
             'subject_identifier': care_seeking_endpoint.subject_identifier
         }
