@@ -10,6 +10,7 @@ class SymptomsAndCareSeekingEndpointFormValidator(FormValidator):
     codinator_exit_form_model_cls = django_apps.get_model(codinator_exit_form_model)
 
     def clean(self):
+        self.validate_codinator_exit_required()
 
         fields_required = {
             'cancer_symptom_estimated': 'cancer_symptom_estimation',
