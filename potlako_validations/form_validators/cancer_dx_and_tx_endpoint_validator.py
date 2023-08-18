@@ -12,6 +12,7 @@ class CancerDxAndTxEndpointFormValidator(FormValidator):
         return django_apps.get_model(self.care_seeking_endpoint_model)
 
     def clean(self):
+        self.validate_care_seeking_endpoint_completed()
 
         req_fields = ['diagnosis_date', 'diagnosis_date_estimated']
         for req_field in req_fields:
@@ -109,7 +110,6 @@ class CancerDxAndTxEndpointFormValidator(FormValidator):
             field='radiation_date_estimated',
             field_required='radiation_date_estimation')
 
-        self.validate_care_seeking_endpoint_completed()
 
     def validate_care_seeking_endpoint_completed(self):
         """Validates that the care seeking endpoint is completed before

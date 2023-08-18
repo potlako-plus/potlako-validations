@@ -78,7 +78,7 @@ class SubjectLocatorFormValidator(BaseSubjectLocatorFormValidator):
                 NO, field='has_alt_contact', field_required=field,
                 inverse=False)
 
-        if self.cleaned_data['may_call'] == YES:
+        if self.cleaned_data.get('may_call', None) == YES:
             if (not self.cleaned_data['subject_cell'] and
                     not self.cleaned_data['subject_phone']):
                 message = {'may_call':
