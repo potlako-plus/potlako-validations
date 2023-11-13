@@ -24,7 +24,6 @@ class SymptomsAndCareSeekingEndpointFormValidator(FormValidator):
                 field=field,
                 field_required=field_required)
 
-        self.validate_codinator_exit_required()
 
     def validate_codinator_exit_required(self):
         try:
