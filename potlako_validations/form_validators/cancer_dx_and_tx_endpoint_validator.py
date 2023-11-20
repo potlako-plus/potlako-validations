@@ -42,8 +42,7 @@ class CancerDxAndTxEndpointFormValidator(FormValidator):
 
         self.validate_other_specify(field='non_cancer_diagnosis')
 
-        required_fields = ['cancer_diagnosis', 'cancer_histology_code',
-                           'cancer_diagnosis_stage', 'cancer_therapy']
+        required_fields = ['cancer_diagnosis_stage', 'cancer_therapy']
         for required_field in required_fields:
             self.required_if(
                 *cancer_responses,
@@ -109,7 +108,6 @@ class CancerDxAndTxEndpointFormValidator(FormValidator):
             YES,
             field='radiation_date_estimated',
             field_required='radiation_date_estimation')
-
 
     def validate_care_seeking_endpoint_completed(self):
         """Validates that the care seeking endpoint is completed before
