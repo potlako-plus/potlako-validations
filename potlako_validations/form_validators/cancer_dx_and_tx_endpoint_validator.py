@@ -30,6 +30,12 @@ class CancerDxAndTxEndpointFormValidator(FormValidator):
         self.required_if(
             *cancer_responses,
             field='clinical_impression',
+            field_required='icd_10_code')
+
+        cancer_responses = ['confirmed_cancer', 'probable_cancer']
+        self.required_if(
+            *cancer_responses,
+            field='clinical_impression',
             field_required='final_cancer_diagnosis')
 
         self.validate_other_specify(field='final_cancer_diagnosis')
