@@ -40,9 +40,8 @@ class CancerDxAndTxEndpointFormValidator(FormValidator):
 
         self.validate_other_specify(field='final_cancer_diagnosis')
 
-        non_cancer_responses = ['confirmed_not_cancer', 'alternative_diagnosis']
-        self.required_if(
-            *non_cancer_responses,
+        self.not_required_if(
+            *cancer_responses,
             field='clinical_impression',
             field_required='non_cancer_diagnosis')
 
