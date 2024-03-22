@@ -28,11 +28,10 @@ class SymptomsAndCareSeekingEndpointFormValidator(FormValidator):
         discussion_date = 'discussion_date'
         date_estimated = 'discussion_date_estimated'
 
-        if (self.cleaned_data.get(discussion_date) is None
-            and self.cleaned_data.get(date_estimated) is not None):
-            msg = {date_estimated: 'This field is not required.'}
-            self._errors.update(msg)
-            raise ValidationError(msg)
+        self.required_if_not_none(
+            field=discussion_date,
+            field_required=date_estimated
+        )
 
 
     def validate_codinator_exit_required(self):
