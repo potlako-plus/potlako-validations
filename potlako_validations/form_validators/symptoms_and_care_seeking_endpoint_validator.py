@@ -14,6 +14,7 @@ class SymptomsAndCareSeekingEndpointFormValidator(FormValidator):
 
         fields_required = {
             'cancer_symptom_estimated': 'cancer_symptom_estimation',
+            'symptoms_discussion': 'discussion_date',
             'discussion_date_estimated': 'discussion_date_estimation',
             'seek_help_date_estimated': 'seek_help_date_estimation',
             'first_seen_date_estimated': 'first_seen_date_estimation'}
@@ -23,6 +24,14 @@ class SymptomsAndCareSeekingEndpointFormValidator(FormValidator):
                 YES,
                 field=field,
                 field_required=field_required)
+
+        discussion_date = 'discussion_date'
+        date_estimated = 'discussion_date_estimated'
+
+        self.required_if_not_none(
+            field=discussion_date,
+            field_required=date_estimated
+        )
 
 
     def validate_codinator_exit_required(self):
