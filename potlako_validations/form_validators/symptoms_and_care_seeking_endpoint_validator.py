@@ -34,11 +34,6 @@ class SymptomsAndCareSeekingEndpointFormValidator(FormValidator):
             self._errors.update(msg)
             raise ValidationError(msg)
 
-        # self.not_required_if(
-        #     NO,
-        #     field='discussion_date_estimated',
-        #     field_required='discussion_date_estimation'
-        # )
 
     def validate_codinator_exit_required(self):
         try:
