@@ -1,6 +1,6 @@
 from django.apps import apps as django_apps
 from django.core.exceptions import ValidationError
-from edc_constants.constants import YES
+from edc_constants.constants import YES, NO
 from edc_form_validators import FormValidator
 
 
@@ -14,6 +14,7 @@ class SymptomsAndCareSeekingEndpointFormValidator(FormValidator):
 
         fields_required = {
             'cancer_symptom_estimated': 'cancer_symptom_estimation',
+            'symptoms_discussion': 'discussion_date',
             'discussion_date_estimated': 'discussion_date_estimation',
             'seek_help_date_estimated': 'seek_help_date_estimation',
             'first_seen_date_estimated': 'first_seen_date_estimation'}
@@ -24,6 +25,20 @@ class SymptomsAndCareSeekingEndpointFormValidator(FormValidator):
                 field=field,
                 field_required=field_required)
 
+        discussion_date = 'discussion_date'
+        date_estimated = 'discussion_date_estimated'
+
+        if (self.cleaned_data.get(discussion_date) is None
+            and self.cleaned_data.get(date_estimated) is not None):
+            msg = {date_estimated: 'This field is not required.'}
+            self._errors.update(msg)
+            raise ValidationError(msg)
+
+        # self.not_required_if(
+        #     NO,
+        #     field='discussion_date_estimated',
+        #     field_required='discussion_date_estimation'
+        # )
 
     def validate_codinator_exit_required(self):
         try:
