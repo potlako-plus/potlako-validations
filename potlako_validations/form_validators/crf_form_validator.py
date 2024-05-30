@@ -8,6 +8,7 @@ from django.utils import timezone
 from edc_action_item.site_action_items import site_action_items
 from edc_constants.constants import NO, NEW
 from potlako_prn.action_items import SUBJECT_OFFSTUDY_ACTION
+from django.core.exceptions import ObjectDoesNotExist
 import pytz
 
 
@@ -22,9 +23,25 @@ class CRFFormValidator:
             raise forms.ValidationError(
                 "Missing Subject Visit.")
 
-        if self.instance and not self.instance.id:
-            self.validate_offstudy_model()
+        if self.self.instance and not self.instance.id:
+            self.validate_cancer_dx_endpoint()
         super().clean()
+
+    # check cancerdxandtxendpoint
+    def validate_cancer_dx_endpoint(self):
+        """Checks if there is a cancer endpoint to mark offstudy
+        """
+        cancer_dx_endpoint_cls = django_apps.get_model('potlako_subject.cancerdxandtxendpoint')
+        try:
+            obj = cancer_dx_endpoint_cls.objects.get(
+                subject_identifier=self.subject_identifier)
+        except ObjectDoesNotExist:
+            pass
+        else:
+            if obj.final_deposition == 'exit':
+                raise forms.ValidationError(
+                        'Participant has been taken offstudy. Cannot capture any '
+                        'new data.')
 
     def validate_offstudy_model(self):
         subject_offstudy_cls = django_apps.get_model(
