@@ -23,7 +23,7 @@ class CRFFormValidator:
             raise forms.ValidationError(
                 "Missing Subject Visit.")
 
-        if self.self.instance and not self.instance.id:
+        if self.instance and not self.instance.id:
             self.validate_cancer_dx_endpoint()
         super().clean()
 
