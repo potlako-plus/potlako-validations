@@ -59,12 +59,12 @@ class CancerDxAndTxEndpointFormValidator(FormValidator):
         clinical_impression = self.cleaned_data.get('clinical_impression')
 
         for cancer_stage in cancer_stages:
-            if (clinical_impression == 'confirmed_cancer'
+            if (clinical_impression in cancer_responses
                     and self.cleaned_data.get(cancer_stage) is None):
                 msg = {cancer_stage: 'This field is required.'}
                 self._errors.update(msg)
                 raise ValidationError(msg)
-            elif (clinical_impression != 'confirmed_cancer'
+            elif (clinical_impression not in cancer_responses
                   and self.cleaned_data.get(cancer_stage) is not None):
                 msg = {cancer_stage: 'This field is not required.'}
                 self._errors.update(msg)
